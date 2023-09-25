@@ -1,0 +1,5 @@
+# Ignorar los módulos de Node.js (carpeta node_modules)
+node_modules/
+
+# Ignorar archivos .env (configuración de entorno)
+.env
