@@ -6,7 +6,22 @@ module.exports = (sequelize) => {
       type :DataTypes.INTEGER,
       primaryKey: true,
       unique: true
-    }
+    },
+    score: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    comment: {
+      type: DataTypes.STRING,
+    },
+    userName: {
+      type: DataTypes.STRING,
+    },
+    target: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+
   },
     {
       timestamps: false,
