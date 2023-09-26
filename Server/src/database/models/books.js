@@ -11,27 +11,22 @@ module.exports = (sequelize) => {
             },
             title: {
                 type: DataTypes.STRING,
-                allowNull: false,
+                allowNull: false
             },
             author: {
-                type: DataTypes.STRING,
-                allowNull: false,
+                type: DataTypes.ARRAY(DataTypes.STRING),
             },
             description: {
                 type: DataTypes.TEXT,
-                allowNull: false,
             },
             gender: {
-                type: DataTypes.STRING,
-                allowNull: false,
+                type: DataTypes.ARRAY(DataTypes.STRING),
             },
             publicationYear: {
                 type: DataTypes.INTEGER,
-                allowNull: false,
             },
             image: {
                 type: DataTypes.TEXT,
-                allowNull: false,
             },
             sellPrice: {
                 type: DataTypes.INTEGER,
