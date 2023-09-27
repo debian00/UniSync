@@ -18,13 +18,13 @@ ReviewModel(sequelize);
 BookModel(sequelize);
 SaleModel(sequelize);
 
-const { User, Review } = sequelize.models;
+const { User, Review, Book, Sale } = sequelize.models;
 
-// User.belongsToMany(Review, { through: "userReview" });
-// Review.belongsTo(User, { through: "userReview" });
+User.belongsToMany(Review, { through: "userReview" });
+Review.belongsTo(User, { through: "userReview" });
 
-// User.hasMany(Sale, {through: "bookSales"})
-// Book.belongsToMany(Sale, {through: "bookSales"})
+User.belongsToMany(Sale, {through: "bookSales"})
+Book.belongsToMany(Sale, {through: "bookSales"})
 
 
 module.exports = {
