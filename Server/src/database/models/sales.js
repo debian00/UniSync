@@ -3,32 +3,39 @@ const { DataTypes } = require("sequelize");
 module.exports = (sequelize) => {
   sequelize.define("Sale", {
     id: {
-      type :DataTypes.INTEGER,
+      type: DataTypes.UUID,
       primaryKey: true,
-      unique: true
+      defaultValue: DataTypes.UUIDV4,
     },
-    userName: {
-      type: DataTypes.STRING,
+    userId: {
+      type: DataTypes.UUID,
       allowNull: false,
     },
-    book: {
-      type: DataTypes.STRING,
+    bookId: {
+      type: DataTypes.UUID,
       allowNull: false,
     },
-    price: {
+    purchaseDate: {
+      type: DataTypes.DATE,
+      allowNull: false,
+    },
+    totalPrice: {
+      type: DataTypes.DECIMAL(10, 2),
+      allowNull: false,
+    },
+    quantity: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    payment:{
-      type:DataTypes.ENUM("Efectivo","Tarjeta de credito","Tarjeta de debito","Transferencia")
+    paymentMethod: {
+      type: DataTypes.ENUM("Efectivo", "Tarjeta de crédito", "Tarjeta de débito", "Transferencia"),
+      allowNull: false,
     },
-    deliveryLocation:{
-      type: DataTypes.STRING
-    }
-
+    deliveryLocation: {
+      type: DataTypes.STRING,
+    },
   },
-    {
-      timestamps: true,
-    }
-  )
-}
+  {
+    timestamps: false,
+  });
+};

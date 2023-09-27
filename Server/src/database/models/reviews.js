@@ -3,25 +3,25 @@ const { DataTypes } = require("sequelize");
 module.exports = (sequelize) => {
   sequelize.define("Review", {
     id: {
-      type :DataTypes.INTEGER,
+      type: DataTypes.UUID, // Cambiado a UUID
       primaryKey: true,
-      unique: true
+      defaultValue: DataTypes.UUIDV4, // Cambiado a UUIDV4
     },
     score: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
     comment: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
-    userName: {
-      type: DataTypes.STRING,
-    },
-    target: {
-      type: DataTypes.STRING,
+    userId: {
+      type: DataTypes.UUID,
       allowNull: false,
     },
-
+    bookId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+    },
   },
     {
       timestamps: false,

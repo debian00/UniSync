@@ -7,7 +7,7 @@ module.exports = (sequelize) => {
       primaryKey: true,
       defaultValue: DataTypes.UUIDV4
     },
-    fullName: {
+    name: {
       type: DataTypes.STRING(25),
     },
     userName: {
@@ -19,8 +19,8 @@ module.exports = (sequelize) => {
       allowNull: true
     },
     birthDate: {
-      type: DataTypes.STRING,
-      allowNull: false
+      type: DataTypes.DATE,
+      allowNull: true
     },
     phoneNumber: {
       type: DataTypes.STRING, // Cambiado: NUMBER a STRING si incluye caracteres no numéricos
