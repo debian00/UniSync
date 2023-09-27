@@ -16,7 +16,7 @@ const getAllUsersHandler = async (req, res) => {
     const response = await getAllUsersController()
     res.status(200).json(response)
   } catch (error) {
-    res.status(404).json('Error al traer los usuarios')
+    res.status(400).json('Error al traer los usuarios')
   }
 }
 
@@ -72,7 +72,7 @@ const createUserHandler = async (req, res) => {
     })
     res.status(201).json(userCreated)
   } catch (error) {
-    res.status(404).json("Error al crear usuario")
+    res.status(400).json("Error al crear usuario")
   }
 }
 
