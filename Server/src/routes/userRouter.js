@@ -16,7 +16,7 @@ userRouter.get("/", getUserByNameOrEmailHandler);
 userRouter.get("/:id", getUsersByIdHandler);
 userRouter.post("/create", createUserHandler);
 userRouter.put("/update", updateUserHandler);
-userRouter.delete("/delete", deleteUserHandler);
+userRouter.delete("/delete/:id", deleteUserHandler);
 
 
 module.exports = userRouter;
