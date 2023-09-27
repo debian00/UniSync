@@ -15,7 +15,7 @@ userRouter.get("/", getAllUsersHandler);
 userRouter.get("/", getUserByNameOrEmailHandler);
 userRouter.get("/:id", getUsersByIdHandler);
 userRouter.post("/create", createUserHandler);
-userRouter.put("/update/:id", updateUserHandler);
+userRouter.put("/update", updateUserHandler);
 userRouter.delete("/delete/:id", deleteUserHandler);
 
 
