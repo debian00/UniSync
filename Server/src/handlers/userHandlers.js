@@ -119,7 +119,7 @@ const deleteUserHandler = async (req, res) => {
     res.status(200).json(response)
   } catch (error) {
     console.log(error)
-    res.status(404).json(`Usuario ${id} ha sido vaporizado`)
+    res.status(404).json(`Usuario ${id} no ha posido ser vaporizado`)
   }
 }
 
