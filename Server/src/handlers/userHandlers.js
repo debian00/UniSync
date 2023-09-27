@@ -16,6 +16,7 @@ const getAllUsersHandler = async (req, res) => {
     const response = await getAllUsersController()
     res.status(200).json(response)
   } catch (error) {
+    console.log(error)
     res.status(404).json('Error al traer los usuarios')
   }
 }
@@ -43,6 +44,7 @@ const getUsersByIdHandler = async (req, res) => {
     const response = await getUsersByIdController(id)
     res.status(200).json(response)
   } catch (error) {
+    console.log(error)
     res.status(404).json(`No encontrado el usuario con id ${id}`)
   }
 }
@@ -72,6 +74,7 @@ const createUserHandler = async (req, res) => {
     })
     res.status(201).json(userCreated)
   } catch (error) {
+    console.log(error)
     res.status(404).json("Error al crear usuario")
   }
 }
@@ -100,6 +103,7 @@ const updateUserHandler = async (req, res) => {
     })
     res.status(200).json(updatedUser)
   } catch (error) {
+    console.log(error)
     res.status(400).json("Problemas al actualizar datos de cuenta")
   }
 }
@@ -112,6 +116,7 @@ const deleteUserHandler = async (req, res) => {
     const response = await deleteUserController(id)
     res.status(200).json(response)
   } catch (error) {
+    console.log(error)
     res.status(404).json(`Usuario ${id} ha sido vaporizado`)
   }
 }

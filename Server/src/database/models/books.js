@@ -25,8 +25,8 @@ module.exports = (sequelize) => {
             publicationYear: {
                 type: DataTypes.INTEGER,
             },
-            image: {
-                type: DataTypes.TEXT,
+            images: {
+                type: DataTypes.ARRAY(DataTypes.TEXT),
             },
             sellPrice: {
                 type: DataTypes.INTEGER,
