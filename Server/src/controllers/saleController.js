@@ -11,8 +11,8 @@ const getAllSaleController = async () => {
         throw error;
     }
 };
-//Trae las ventas por Id
-const getSaleById = async (id) => {
+//Trae una venta por Id
+const getSaleByIdController = async (id) => {
     try {
         const sale = await Sale.findOne({
             where: {
@@ -104,9 +104,9 @@ const deleteSaleController = async (id) => {
   };
 
 module.exports = {
-    getSaleById,
-    createSaleController,
     getAllSaleController,
+    getSaleByIdController,
+    createSaleController,
     updateSaleController,
     deleteSaleController
 }
