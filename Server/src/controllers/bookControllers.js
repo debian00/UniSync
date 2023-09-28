@@ -3,26 +3,7 @@ const { Op } = require("sequelize");
 
 const getAllBooksController = async (req) => {
 
-  //Queries de page y size
-  const { query } = req;
-  const pageAsNumber = Number.parseInt(query.page);
-  const sizeAsNumber = Number.parseInt(query.size);
-
-
-  //Logica para la pagina y numero de items
-  let page = 1;
-  let size = 10;
-  if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {
-    page = pageAsNumber;
-  }
-  if (!Number.isNaN(sizeAsNumber) && sizeAsNumber > 0 && sizeAsNumber < 10) {
-    size = sizeAsNumber;
-  }
-
-  const books = await Book.findAndCountAll({
-    limit: size,
-    offset: (page - 1) * size,
-  });
+  const books = await Book.findAndCountAll()
   return books;
 
 }
