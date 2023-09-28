@@ -19,7 +19,7 @@ module.exports = (sequelize) => {
             description: {
                 type: DataTypes.TEXT,
             },
-            gender: {
+            genre: {
                 type: DataTypes.ARRAY(DataTypes.STRING),
             },
             publicationYear: {
