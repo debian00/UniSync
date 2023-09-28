@@ -1,5 +1,6 @@
 const { compare } = require('../../middlewares/hashPassword')
-const {} = require('../../middlewares/tokens/loginToken')
+const { loginToken } = require('../../middlewares/tokens/loginToken')
+const { User } = require('../../database/db')
 
 const localLogin = async (req, res) => {
   try {
@@ -13,7 +14,7 @@ const localLogin = async (req, res) => {
     const isPasswordValid = await compare(password, user.password);
 
     if (isPasswordValid) {
-      const tokenSession = await tokenSign(user);
+      const tokenSession = await loginToken(user);
       res.status(200).json({ success: true, data: user, token: tokenSession });
     } else {
       res.status(401).json({ success: false, msg: 'Contraseña incorrecta' });
