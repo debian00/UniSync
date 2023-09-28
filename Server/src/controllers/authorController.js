@@ -83,7 +83,7 @@ const deleteAuthorController = async (id) => {
     });
 
     if (authorToDelete) {
-      await authorToDelete.destroy(); // Corregir aquí
+      await authorToDelete.destroy(); 
       return "Autor eliminado con éxito";
     } else {
       throw new Error("Autor no encontrado con ID " + id);

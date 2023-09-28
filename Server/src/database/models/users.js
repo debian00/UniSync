@@ -41,6 +41,10 @@ module.exports = (sequelize) => {
       allowNull: true,
       defaultValue: "user",
     },
+    hide: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
   },
     {
       timestamps: false,
