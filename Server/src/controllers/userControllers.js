@@ -4,6 +4,17 @@ const { encrypt } = require('../middlewares/hashPassword');
 const { registerToken } = require('../middlewares/tokens/registerToken');
 
 
+// Método para pausar
+User.prototype.sleep = function () {
+  return this.update({ hide: true });
+};
+
+// Método para restaurar
+User.prototype.restore = function () {
+  return this.update({ hide: false });
+};
+
+
 //Trae a todos los usuarios
 const getAllUsersController = async () => {
   try {
@@ -164,11 +175,42 @@ const deleteUserController = async (id) => {
   }
 };
 
+
+//Suspender un usuario temporalmente o "borrado logico"
+const sleepUserByIdController = async (id) => {
+  try {
+    const user = await User.findOne({ where: { id } });
+    if (!user) throw new Error("Usuario no encontrado");
+    await user.sleep();
+    return "Usuario pausado satisfactoriamente";
+  } catch (error) {
+    console.error("Error al pausar el usuario:", error.message);
+    throw new Error("No se pudo pausar el usuario");
+  }
+};
+
+
+//Restaurar un usuario suspendido
+const restoreUserByIdController = async (id) => {
+  try {
+    const user = await User.findOne({ where: { id } });
+    if (!user) throw new Error("Usuario no encontrado");
+    await user.restore();
+    return "Usuario restaurado satisfactoriamente";
+  } catch (error) {
+    console.error("Error al restaurar el usuario:", error.message);
+    throw new Error("No se pudo restaurar el usuario");
+  }
+};
+
+
 module.exports = {
   createUserController,
   deleteUserController,
   getAllUsersController,
   getUserByNameOrEmailController,
   getUsersByIdController,
-  updateUserController
+  updateUserController,
+  sleepUserByIdController,
+  restoreUserByIdController
 };

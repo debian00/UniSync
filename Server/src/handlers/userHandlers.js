@@ -6,7 +6,9 @@ const {
   getAllUsersController,
   getUserByNameOrEmailController,
   getUsersByIdController,
-  updateUserController
+  updateUserController,
+  restoreUserByIdController,
+  sleepUserByIdController
 } = require('../controllers/userControllers')
 
 
@@ -123,11 +125,39 @@ const deleteUserHandler = async (req, res) => {
   }
 }
 
+
+//Suspender un usuario temporalmente o "borrado logico"
+const sleepUserByIdHandler = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await sleepUserByIdController(id);
+    res.status(200).json(`Usuario suspendido con éxito: ${response}`);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json(`No se pudo suspender el usuario: ${error.message}`);
+  }
+}
+
+
+//Restaurar un usuario suspendido
+const restoreUserByIdHandler = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const response = await restoreUserByIdController(id);
+    res.status(200).json(`Usuario restaurado con éxito: ${response}`);
+  } catch (error) {
+    console.error(error);
+    res.status(400).json(`No se pudo restaurar el usuario: ${error.message}`);
+  }
+}
+
 module.exports = {
   getAllUsersHandler,
   getUserByNameOrEmailHandler, 
   getUsersByIdHandler,
   createUserHandler,
   updateUserHandler, 
-  deleteUserHandler
+  deleteUserHandler,
+  sleepUserByIdHandler,
+  restoreUserByIdHandler
 }
