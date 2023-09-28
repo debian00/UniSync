@@ -1,14 +1,14 @@
 const { Book, Genre, Review } = require("../database/db");
 const { Op } = require("sequelize");
 
-const getAllBooks = async () => {
+const getAllBooksController = async () => {
    
     const books = await Book.findAndCountAll();
     return books;
 
 }
 
-const getBookByName = async (name) => {
+const getBookByNameController = async (name) => {
     const book = await Book.findAll({
       where: {
         name: {
@@ -19,7 +19,7 @@ const getBookByName = async (name) => {
     return book;
 }
   
-const getBookById = async (id) => {
+const getBookByIdController = async (id) => {
     const book = await Book.findOne({
       where: {
         id:id
@@ -32,7 +32,7 @@ const createBookController = async (
   title,
   author,
   description,
-  gender,
+  genre,
   publicationYear,
   images,
   sellPrice,
@@ -48,7 +48,7 @@ const createBookController = async (
     where :{
     title : title,
     author : author,
-    gender : gender,
+    genre : genre,
     publicationYear : publicationYear,
   }})
 if(book){return "Libro existente"}
@@ -56,7 +56,7 @@ if(book){return "Libro existente"}
       title,
       author,
       description,
-      gender,
+      genre,
       publicationYear,
       images,
       sellPrice,
@@ -69,7 +69,7 @@ const updateBookController = async (
   title,
   author,
   description,
-  gender,
+  genre,
   publicationYear,
   images,
   sellPrice,
@@ -82,7 +82,7 @@ try {
       title,
       author,
       description,
-      gender,
+      genre,
       publicationYear,
       images,
       sellPrice,
@@ -126,9 +126,9 @@ const restoreBookController = async (id) => {
 }}
 
 module.exports = {
-    getAllBooks,
-    getBookById,
-    getBookByName,
+    getAllBooksController,
+    getBookByNameController,
+    getBookByIdController,
     createBookController,
     updateBookController,
     deleteBookController,

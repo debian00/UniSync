@@ -1,11 +1,20 @@
-const {getAllBooks,getBookByName, getBookById} = require("../controllers/bookControllers");
+const {
+    getAllBooksController,
+    getBookByNameController, 
+    getBookByIdController,
+    createBookController,
+    updateBookController,
+    deleteBookController,
+    pauseBookController,
+    restoreBookController
+} = require("../controllers/bookControllers");
 
 
 const getAllBooksHandler = async (req, res) => {
     const { name } = req.query;
        
     try {
-        const response = name ? await getBookByName(name) : await getAllBooks();
+        const response = name ? await getBookByNameController(name) : await getAllBooksController();
         res.status(200).json(response);
     } catch (error) {
         res.status(404).json("No se encontró ningun libro con ese nombre");
@@ -16,7 +25,7 @@ const getBookByIdHandler = async (req, res) => {
     const { id } = req.params;
        
     try {
-        const response =  await getBookById(id) 
+        const response =  await getBookByIdController(id) 
         res.status(200).json(response); 
     } catch (error) {
         res.status(404).json("Libro no encontrado por Id");
@@ -27,18 +36,18 @@ const createBookHandler = async (req,res) => {
         title,
         author,
         description,
-        gender,
+        genre,
         publicationYear,
         images,
         sellPrice,
         stock
     } = req.body
     try {
-        const response = await createBook(
+        const response = await createBookController(
             title,
             author,
             description,
-            gender,
+            genre,
             publicationYear,
             images,
             sellPrice,
@@ -51,13 +60,13 @@ const createBookHandler = async (req,res) => {
     }
 }
 
-const editBookHandler = async (req,res) => {
-    const { id } =req.params
+const updateBookHandler = async (req,res) => {
+    const { id } = req.params
     const {
         title,
         author,
         description,
-        gender,
+        genre,
         publicationYear,
         images,
         sellPrice,
@@ -65,12 +74,12 @@ const editBookHandler = async (req,res) => {
         availability
     } = req.body
     try {
-    const response = await editBook(
+    const response = await updateBookController(
         id,
         title,
         author,
         description,
-        gender,
+        genre,
         publicationYear,
         images,
         sellPrice,
@@ -87,7 +96,7 @@ const editBookHandler = async (req,res) => {
 const deleteBookHandler = async (req,res) => {
     const { id } = req.params
     try {
-    await deleteBook(id)
+    await deleteBookController(id)
     res.status(200).json("Libro eliminado correctamente")
     } catch (error) {
         console.log(error)
@@ -98,7 +107,7 @@ const deleteBookHandler = async (req,res) => {
 const pauseBookHanlder = async (req,res) =>{
     const { id } = req.params
     try {
-    await pauseBook(id)
+    await pauseBookController(id)
     res.status(200).json("Exito suspendiendo la publicacion, ahora el libro esta almacenado en las sombras")
     } catch (error) {
         console.log(error)
@@ -108,7 +117,7 @@ const pauseBookHanlder = async (req,res) =>{
 const restoreBookHandler= async (req,res) =>{
     const { id } = req.params
     try {
-    await restoreBook(id)
+    await restoreBookController(id)
     res.status(200).json("Exito reanudando la publicacion, el libro vuelve a ver la luz del dia")
     } catch (error) {
         console.log(error)
@@ -120,7 +129,7 @@ module.exports = {
     getAllBooksHandler,
     getBookByIdHandler,
     createBookHandler,
-    editBookHandler,
+    updateBookHandler,
     deleteBookHandler,
     pauseBookHanlder,
     restoreBookHandler

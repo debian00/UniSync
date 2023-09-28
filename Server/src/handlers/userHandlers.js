@@ -86,7 +86,6 @@ const createUserHandler = async (req, res) => {
 const updateUserHandler = async (req, res) => {
   const {id} = req.params
   const {
-    userName,
     name,
     profilePic,
     phoneNumber,
@@ -98,7 +97,6 @@ const updateUserHandler = async (req, res) => {
     const updatedUser = await updateUserController({
       id,
       name,
-      userName,
       profilePic,
       birthDate,
       phoneNumber,
