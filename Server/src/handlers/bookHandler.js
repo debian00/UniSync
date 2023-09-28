@@ -31,6 +31,7 @@ const createBookHandler = async (req,res) => {
         publicationYear,
         images,
         sellPrice,
+        stock
     } = req.body
     try {
         const response = await createBook(
@@ -40,7 +41,8 @@ const createBookHandler = async (req,res) => {
             gender,
             publicationYear,
             images,
-            sellPrice    
+            sellPrice,
+            stock    
         )
     res.status(200).json(response)
     } catch (error) {
@@ -75,6 +77,7 @@ const editBookHandler = async (req,res) => {
         stock,
         availability
     )
+    res.status(200).json(response)
     } catch (error) {
         console.log(error)
         res.status(400).json("Error editando el libro")
@@ -92,10 +95,33 @@ const deleteBookHandler = async (req,res) => {
     }
 }
 
+const pauseBookHanlder = async (req,res) =>{
+    const { id } = req.params
+    try {
+    await pauseBook(id)
+    res.status(200).json("Exito suspendiendo la publicacion, ahora el libro esta almacenado en las sombras")
+    } catch (error) {
+        console.log(error)
+        res.status(400).json("No se pudo pausar la publicacion")
+    }
+}
+const restoreBookHandler= async (req,res) =>{
+    const { id } = req.params
+    try {
+    await restoreBook(id)
+    res.status(200).json("Exito reanudando la publicacion, el libro vuelve a ver la luz del dia")
+    } catch (error) {
+        console.log(error)
+        res.status(400).json("No se pudo restaurar la publicacion")
+    }
+}
+
 module.exports = {
     getAllBooksHandler,
     getBookByIdHandler,
     createBookHandler,
     editBookHandler,
-    deleteBookHandler
+    deleteBookHandler,
+    pauseBookHanlder,
+    restoreBookHandler
 }

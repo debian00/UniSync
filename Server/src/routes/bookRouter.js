@@ -4,7 +4,10 @@ const {
   getBookByIdHandler,
   createBookHandler,
   editBookHandler,
-  deleteBookHandler
+  deleteBookHandler,
+  pauseBookHandler,
+  restoreBookHandler
+
 } = require("../handlers/bookHandler");
 
 
@@ -20,6 +23,9 @@ bookRouter.put("/edit/:id", editBookHandler)
 
 bookRouter.delete("/delete/:id", deleteBookHandler)
 
+bookRouter.get("/pause/:id", pauseBookHandler)
+
+bookRouter.get("/restore/:id", restoreBookHandler)
 
 
 

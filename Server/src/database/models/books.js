@@ -44,7 +44,7 @@ module.exports = (sequelize) => {
             },
             availability: {
                 type: DataTypes.BOOLEAN,
-                defaultValue: false,
+                defaultValue: true,
             }
 
         },
