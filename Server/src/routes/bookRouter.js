@@ -6,7 +6,8 @@ const {
   updateBookHandler,
   deleteBookHandler,
   pauseBookHandler,
-  restoreBookHandler
+  restoreBookHandler,
+  getBookByNameHandler
 
 } = require("../handlers/bookHandler");
 
@@ -14,6 +15,8 @@ const {
 const bookRouter = Router();
 
 bookRouter.get("/", getAllBooksHandler);
+
+bookRouter.get("/", getBookByNameHandler);
 
 bookRouter.get("/:id", getBookByIdHandler);
 

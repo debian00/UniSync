@@ -11,15 +11,24 @@ const {
 
 
 const getAllBooksHandler = async (req, res) => {
-    const { name } = req.query;
        
     try {
-        const response = name ? await getBookByNameController(name) : await getAllBooksController();
+        const response = await getAllBooksController(req);
         res.status(200).json(response);
     } catch (error) {
-        res.status(404).json("No se encontró ningun libro con ese nombre");
+        res.status(400).json("Error al traer los libros");
     }
 }
+
+const getBookByNameHandler = async (req, res) => {
+    const {name} = req.query
+    try {
+        const response = await getBookByNameController(name)
+        res.status(200).json(response)
+    } catch (error) {
+        res.status(404).json("Libro no pudo ser localizado")
+    }
+} 
 
 const getBookByIdHandler = async (req, res) => {
     const { id } = req.params;
@@ -132,5 +141,6 @@ module.exports = {
     updateBookHandler,
     deleteBookHandler,
     pauseBookHandler,
-    restoreBookHandler
+    restoreBookHandler,
+    getBookByNameHandler
 }
