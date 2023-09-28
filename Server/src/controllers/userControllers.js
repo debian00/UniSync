@@ -204,6 +204,37 @@ const restoreUserByIdController = async (id) => {
 };
 
 
+//Dar permisos de administrador
+const allowAdminPermissionsController = async (id) => {
+  try {
+    const user = await User.findOne({ where: { id: id } });
+    if (user) {
+      const newAdmin = await user.update({ userType: "admin" });
+      return newAdmin;
+    }
+    throw new Error("Usuario no encontrado");
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+
+//Quitar permisos de administrador
+const forbidAdminPermissionsController = async (id) => {
+  try {
+    const user = await User.findOne({ where: { id: id } });
+    if (user) {
+      const newUser = await user.update({ userType: "user" });
+      return newUser;
+    }
+    throw new Error("Usuario no encontrado");
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 module.exports = {
   createUserController,
   deleteUserController,
@@ -212,5 +243,7 @@ module.exports = {
   getUsersByIdController,
   updateUserController,
   sleepUserByIdController,
-  restoreUserByIdController
+  restoreUserByIdController,
+  allowAdminPermissionsController,
+  forbidAdminPermissionsController
 };

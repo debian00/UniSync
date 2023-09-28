@@ -8,7 +8,9 @@ const {
   getUsersByIdController,
   updateUserController,
   restoreUserByIdController,
-  sleepUserByIdController
+  sleepUserByIdController,
+  allowAdminPermissionsController,
+  forbidAdminPermissionsController
 } = require('../controllers/userControllers')
 
 
@@ -149,6 +151,31 @@ const restoreUserByIdHandler = async (req, res) => {
   }
 }
 
+
+//Dar permisos de administrador
+const allowAdminPermissionsHandler = async (req, res) => {
+  const {id} = req.params
+  try {
+    const response = await allowAdminPermissionsController(id)
+    res.status(200).json(response)
+  } catch (error) {
+    res.status(404).json("Usuario no encontrado")
+  }
+}
+
+
+//Quitar permisos de administrador
+const forbidAdminPermissionsHandler = async (req, res) => {
+  const {id} = req.params
+  try {
+    const response = await forbidAdminPermissionsController(id)
+    res.status(200).json(response)
+  } catch (error) {
+    res.status(404).json("Usuario no encontrado")
+  }
+}
+
+
 module.exports = {
   getAllUsersHandler,
   getUserByNameOrEmailHandler, 
@@ -157,5 +184,7 @@ module.exports = {
   updateUserHandler, 
   deleteUserHandler,
   sleepUserByIdHandler,
-  restoreUserByIdHandler
+  restoreUserByIdHandler,
+  forbidAdminPermissionsHandler,
+  allowAdminPermissionsHandler
 }

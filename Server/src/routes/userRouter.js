@@ -7,7 +7,9 @@ const {
   getUsersByIdHandler, 
   updateUserHandler,
   restoreUserByIdHandler,
-  sleepUserByIdHandler
+  sleepUserByIdHandler,
+  allowAdminPermissionsHandler,
+  forbidAdminPermissionsHandler
 } = require("../handlers/userHandlers");
 
 const userRouter = Router();
@@ -28,6 +30,10 @@ userRouter.delete("/delete/:id", deleteUserHandler);
 userRouter.patch("/sleep/:id", sleepUserByIdHandler);
 // Restaurar usuario
 userRouter.patch("/restore/:id", restoreUserByIdHandler);
+//Dar permisos de administrador
+userRouter.patch("/admin/:id", allowAdminPermissionsHandler)
+//Quitar permisos de administrador
+userRouter.patch("/admin't/:id", forbidAdminPermissionsHandler)
 
 
 module.exports = userRouter;
