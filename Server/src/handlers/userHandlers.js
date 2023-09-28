@@ -19,7 +19,7 @@ const getAllUsersHandler = async (req, res) => {
     res.status(200).json(response)
   } catch (error) {
     console.log(error)
-    res.status(404).json('Error al traer los usuarios')
+    res.status(400).json('Error al traer los usuarios')
   }
 }
 
@@ -77,7 +77,7 @@ const createUserHandler = async (req, res) => {
     res.status(201).json(userCreated)
   } catch (error) {
     console.log(error)
-    res.status(404).json("Error al crear usuario")
+    res.status(422).json("Error al crear usuario")
   }
 }
 
@@ -118,7 +118,7 @@ const deleteUserHandler = async (req, res) => {
   const { id } = req.params
   try {
     const response = await deleteUserController(id)
-    res.status(200).json(response)
+    res.status(204).json(response)
   } catch (error) {
     console.log(error)
     res.status(404).json(`Usuario ${id} no ha posido ser vaporizado`)
@@ -131,7 +131,7 @@ const sleepUserByIdHandler = async (req, res) => {
   const { id } = req.params;
   try {
     const response = await sleepUserByIdController(id);
-    res.status(200).json(`Usuario suspendido con éxito: ${response}`);
+    res.status(204).json(`Usuario suspendido con éxito: ${response}`);
   } catch (error) {
     console.error(error);
     res.status(400).json(`No se pudo suspender el usuario: ${error.message}`);
@@ -144,7 +144,7 @@ const restoreUserByIdHandler = async (req, res) => {
   const { id } = req.params;
   try {
     const response = await restoreUserByIdController(id);
-    res.status(200).json(`Usuario restaurado con éxito: ${response}`);
+    res.status(204).json(`Usuario restaurado con éxito: ${response}`);
   } catch (error) {
     console.error(error);
     res.status(400).json(`No se pudo restaurar el usuario: ${error.message}`);

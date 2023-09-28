@@ -64,11 +64,11 @@ const updateAuthorHandler = async (req, res) => {
 const createAuthorHandler = async (req, res) => {
   const { name } = req.body
   try {
-    const response = createAuthorController({ name })
+    const response = await createAuthorController({ name })
     res.status(201).json(response)
   } catch (error) {
     console.log(error)
-    res.status(400).json('No se pudo crear el autor')
+    res.status(422).json('No se pudo crear el autor')
   }
 }
 
@@ -77,8 +77,8 @@ const createAuthorHandler = async (req, res) => {
 const deleteAuthorHandler = async (req, res) => {
   const {id} = req.params
   try {
-    const response = deleteAuthorController(id)
-    res.status(200).json(response)
+    const response = await deleteAuthorController(id)
+    res.status(204).json(response)
   } catch (error) {
     console.log(error)
     res.status(404).json(`Autor ${id} no ha podido ser vaporizado`)

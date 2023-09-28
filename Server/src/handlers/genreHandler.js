@@ -50,11 +50,11 @@ const getGenreByIdHandler = async (req, res) => {
 const createGenreHandler = async (req, res) => {
   const { name } = req.body
   try {
-    const response = createGenreController({ name })
+    const response = await createGenreController({ name })
     res.status(201).json(response)
   } catch (error) {
     console.log(error)
-    res.status(400).json('No se pudo crear el género')
+    res.status(422).json('No se pudo crear el género')
   }
 }
 
@@ -63,8 +63,8 @@ const createGenreHandler = async (req, res) => {
 const deleteGenreHandler = async (req, res) => {
   const {id} = req.params
   try {
-    const response = deleteGenreController(id)
-    res.status(200).json(response)
+    const response = await deleteGenreController(id)
+    res.status(204).json(response)
   } catch (error) {
     console.log(error)
     res.status(404).json(`Género ${id} no ha podido ser vaporizado`)
