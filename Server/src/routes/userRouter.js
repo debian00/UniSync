@@ -10,7 +10,6 @@ const {
   sleepUserByIdHandler
 } = require("../handlers/userHandlers");
 
-
 const userRouter = Router();
 
 //Traer todos los usuarios
