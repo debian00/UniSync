@@ -5,8 +5,10 @@ const bookRouter = require("./bookRouter");
 const userRouter = require('./userRouter')
 const authorRouter = require('./authorRouter')
 const genreRouter = require('./genreRouter')
+const saleRouter = require('./saleRouter');
 
 const router = Router()
+
 
 //Ruta de inicio de sesión local
 router.use('/login', localLoginRouter)
@@ -19,5 +21,7 @@ router.use('/books', bookRouter)
 router.use('/author', authorRouter)
 //Rutas de géneros
 router.use('/genre', genreRouter)
+//Rutas de ventas
+router.use('/sale',saleRouter)
 
 module.exports = router

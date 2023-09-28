@@ -104,7 +104,7 @@ const deleteBookHandler = async (req,res) => {
     }
 }
 
-const pauseBookHanlder = async (req,res) =>{
+const pauseBookHandler = async (req,res) =>{
     const { id } = req.params
     try {
     await pauseBookController(id)
@@ -131,6 +131,6 @@ module.exports = {
     createBookHandler,
     updateBookHandler,
     deleteBookHandler,
-    pauseBookHanlder,
+    pauseBookHandler,
     restoreBookHandler
 }
