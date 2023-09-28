@@ -15,14 +15,14 @@ const sequelize = new Sequelize(
   { logging: false }
 );
 
+BookModel(sequelize);
 UserModel(sequelize);
 ReviewModel(sequelize);
-BookModel(sequelize);
 SaleModel(sequelize);
 AuthorModel(sequelize);
 GenreModel(sequelize)
 
-const { User, Review, Book, Sale, Author, Genre } = sequelize.models;
+const { Book, User, Review, Sale, Author, Genre } = sequelize.models;
 
 //Relaciones de Book
 Book.hasMany(Review);
