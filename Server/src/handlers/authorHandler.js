@@ -28,7 +28,7 @@ const getAuthorByNameHandler = async (req, res) => {
     res.status(200).json(response)
   } catch (error) {
     console.log(error)
-    res.status(404).json('No existe un usuario con ese nombre')
+    res.status(404).json('No existe un autor con ese nombre')
   }
 }
 
@@ -41,7 +41,7 @@ const getAuthorByIdHandler = async (req, res) => {
     res.status(200).json(response)
   } catch (error) {
     console.log(error)
-    res.status(404).json('No existe un usuario con ese id')
+    res.status(404).json('No existe un autor con ese id')
   }
 }
 
@@ -73,7 +73,7 @@ const createAuthorHandler = async (req, res) => {
 }
 
 
-//Borra un usuario
+//Borra un autor
 const deleteAuthorHandler = async (req, res) => {
   const {id} = req.params
   try {
