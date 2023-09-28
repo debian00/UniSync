@@ -6,6 +6,7 @@ const userRouter = require('./userRouter')
 const authorRouter = require('./authorRouter')
 const genreRouter = require('./genreRouter')
 const saleRouter = require('./saleRouter');
+const reviewRouter = require('./reviewRouter');
 
 const router = Router()
 
@@ -14,14 +15,15 @@ const router = Router()
 router.use('/login', localLoginRouter)
 //Rutas de usuarios
 router.use('/users', userRouter)
-
 //Rutas de libros
 router.use('/books', bookRouter)
-//Ruras de autores
+//Rutas de autores
 router.use('/author', authorRouter)
 //Rutas de géneros
 router.use('/genre', genreRouter)
 //Rutas de ventas
 router.use('/sale',saleRouter)
+//Rutas de reviews
+router.use('/review',reviewRouter)
 
 module.exports = router

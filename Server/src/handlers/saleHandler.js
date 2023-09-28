@@ -1,6 +1,6 @@
 const {
     getAllSaleController,
-    getSaleById,
+    getSaleByIdController,
     createSaleController,
     updateSaleController,
     deleteSaleController
@@ -22,7 +22,7 @@ const getSaleByIdHandler = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const response = await getSaleById(id)
+        const response = await getSaleByIdController(id)
         res.status(200).json(response);
     } catch (error) {
         console.log(error)
