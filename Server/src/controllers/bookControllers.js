@@ -1,11 +1,11 @@
-const { Book, Genre, Review } = require("../database/db");
+const { Book, Genre, Review, Author } = require("../database/db");
 const { Op } = require("sequelize");
 
 const getAllBooksController = async () => {
    
     const books = await Book.findAndCountAll();
     return books;
-
+    
 }
 
 const getBookByNameController = async (name) => {
@@ -43,7 +43,15 @@ const createBookController = async (
     validamos que no exista un libro que cuente con los
     siguientes campos iguales a uno ya creado, asi evitamos
     duplicados
-    */
+    */ 
+   if(author){
+   for (let i = 0; i < author.length; i++) {
+      const newAuthor = await Author.findOne({where: {name : author[i]}})
+      if (newAuthor === null){
+      Author.create({name : author[i]})
+      }}}
+  
+  
   const book = await Book.findOne({
     where :{
     title : title,
@@ -51,8 +59,9 @@ const createBookController = async (
     genre : genre,
     publicationYear : publicationYear,
   }})
-if(book){return "Libro existente"}
-  const newBook = await Book.create(
+if(book != null){return "Libro existente"}
+
+  const newBook = await Book.create({
       title,
       author,
       description,
@@ -61,9 +70,10 @@ if(book){return "Libro existente"}
       images,
       sellPrice,
       stock
-  )
+    })
   return newBook
   }
+
 const updateBookController = async (
   id,
   title,

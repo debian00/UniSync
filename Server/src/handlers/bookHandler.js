@@ -42,6 +42,8 @@ const createBookHandler = async (req,res) => {
         sellPrice,
         stock
     } = req.body
+
+        
     try {
         const response = await createBookController(
             title,
