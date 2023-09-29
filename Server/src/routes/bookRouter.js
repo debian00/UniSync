@@ -16,7 +16,7 @@ const bookRouter = Router();
 
 bookRouter.get("/", getAllBooksHandler);
 
-bookRouter.get("/", getBookByNameHandler);
+bookRouter.get("/search", getBookByNameHandler);
 
 bookRouter.get("/:id", getBookByIdHandler);
 

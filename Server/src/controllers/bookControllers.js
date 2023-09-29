@@ -2,37 +2,51 @@ const { Book, Genre, Review } = require("../database/db");
 const { Op } = require("sequelize");
 
 const getAllBooksController = async (req) => {
-  const { page = 1, size = 10 } = req.query;
 
-  // Validación de parámetros
-  const pageNumber = parseInt(page, 10); // Convertir a número entero
-  const pageSize = parseInt(size, 10);   // Convertir a número entero
+  //Queries de page y size
+  const { query } = req;
+  const pageAsNumber = Number.parseInt(query.page);
+  const sizeAsNumber = Number.parseInt(query.size);
+  const {
+    genre,
+    author
+  } = req.query;
 
-  if (isNaN(pageNumber) || isNaN(pageSize) || pageNumber < 0 || pageSize <= 0) {
-    throw new Error("Parámetros de paginación inválidos.");
+  //Logica para la pagina y numero de items
+  let page = 1;
+  let size = 10;
+  if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {
+    page = pageAsNumber;
+  }
+  if (!Number.isNaN(sizeAsNumber) && sizeAsNumber > 0 && sizeAsNumber <= 10) {
+    size = sizeAsNumber;
   }
 
-  const filter = {}
+ // Filtros condicionales para géneros literarios y autores
+ const filter = {};
 
-  // Configuración de opciones
-  const options = {
-    where: filter,
-    limit: pageSize,
-    offset: (pageNumber - 1) * pageSize,
-    // Agrega una ordenación aquí si es necesario
-  };
+ if (author) {
+   filter.author = author;
+ }
 
-  // Consulta y conteo de libros
-  const books = await Book.findAndCountAll(options);
-  return books;
-};
+ if (genre) {
+   filter.genre = genre;
+ }
 
+ const books = await Book.findAndCountAll({
+   where: filter,
+   limit: size,
+   offset: (page - 1) * size,
+ });
 
-const getBookByNameController = async (name) => {
+ return books;
+}
+
+const getBookByNameController = async (title) => {
   const book = await Book.findAll({
     where: {
-      name: {
-        [Op.iLike]: `%${name}%`,
+      title: {
+        [Op.iLike]: `%${title}%`,
       },
     }
   })
@@ -103,7 +117,7 @@ const updateBookController = async (
 ) => {
   try {
     const updateBook = await Book.findOne({ where: { id: id } })
-    await updateBook.update({
+    await updateBook.update(
       title,
       author,
       description,
@@ -113,7 +127,7 @@ const updateBookController = async (
       sellPrice,
       stock,
       availability
-    })
+    )
     return updateBook
   } catch (error) {
     console.log(error)

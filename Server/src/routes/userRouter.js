@@ -17,7 +17,7 @@ const userRouter = Router();
 //Traer todos los usuarios
 userRouter.get("/", getAllUsersHandler); 
 //Traer un usuario por su nombre o email
-userRouter.get("/", getUserByNameOrEmailHandler);
+userRouter.get("/search", getUserByNameOrEmailHandler);
 //Traer un usuario por id
 userRouter.get("/:id", getUsersByIdHandler);
 //Crear usuario nuevo
@@ -33,7 +33,7 @@ userRouter.patch("/restore/:id", restoreUserByIdHandler);
 //Dar permisos de administrador
 userRouter.patch("/admin/:id", allowAdminPermissionsHandler)
 //Quitar permisos de administrador
-userRouter.patch("/admin't/:id", forbidAdminPermissionsHandler)
+userRouter.patch("/noadmin/:id", forbidAdminPermissionsHandler)
 
 
 module.exports = userRouter;
