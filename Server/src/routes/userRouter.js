@@ -17,7 +17,7 @@ const userRouter = Router();
 //Traer todos los usuarios
 userRouter.get("/", getAllUsersHandler); 
 //Traer un usuario por su nombre o email
-userRouter.get("/", getUserByNameOrEmailHandler);
+userRouter.get("/search", getUserByNameOrEmailHandler);
 //Traer un usuario por id
 userRouter.get("/:id", getUsersByIdHandler);
 //Crear usuario nuevo
