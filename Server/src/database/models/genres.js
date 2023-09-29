@@ -4,9 +4,10 @@ module.exports = (sequelize) => {
   sequelize.define(
     "Genre", {
       id: {
-        type: DataTypes.UUID,
+        type: DataTypes.INTEGER,
         primaryKey: true,
-        defaultValue: DataTypes.UUIDV4,
+        autoIncrement: true,
+        unique: true,
       },
       name: {
         type: DataTypes.STRING(50),

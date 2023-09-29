@@ -83,8 +83,12 @@ const createBookController = async (
     sellPrice,
     stock
   })
+  for (let i = 0; i < genre.length; i++) {
+  await newBook.addGenre(genre[i])
+  }
   return newBook
 }
+
 const updateBookController = async (
   id,
   title,
