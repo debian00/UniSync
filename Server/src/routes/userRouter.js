@@ -33,7 +33,7 @@ userRouter.patch("/restore/:id", restoreUserByIdHandler);
 //Dar permisos de administrador
 userRouter.patch("/admin/:id", allowAdminPermissionsHandler)
 //Quitar permisos de administrador
-userRouter.patch("/admin't/:id", forbidAdminPermissionsHandler)
+userRouter.patch("/noadmin/:id", forbidAdminPermissionsHandler)
 
 
 module.exports = userRouter;
