@@ -31,8 +31,11 @@ module.exports = (sequelize) => {
             sellPrice: {
                 type: DataTypes.INTEGER,
             },
+            pages: {
+                type: DataTypes.INTEGER,
+            },
             averageScore: {
-                type: DataTypes.FLOAT,
+                type: DataTypes.DECIMAL(4, 2),
                 defaultValue: 0.0,
             },
             numberOfReviews: {
@@ -48,6 +51,6 @@ module.exports = (sequelize) => {
             }
 
         },
-        { timestamps: false }
+        { timestamps: true }
     );
 };

@@ -8,38 +8,100 @@ const getAllBooksController = async (req) => {
   const pageAsNumber = Number.parseInt(query.page);
   const sizeAsNumber = Number.parseInt(query.size);
   const {
+    name,
     genre,
-    author
+    author,
+    priceMin,
+    priceMax,
+    pagesMin,
+    pagesMax,
+    scoreMin,
+    scoreMax,
+    availability,
   } = req.query;
-
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   //Logica para la pagina y numero de items
+  const order = [];
+  const filter = {};
   let page = 1;
   let size = 10;
-  if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {
-    page = pageAsNumber;
+  if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {page = pageAsNumber;}
+  if (!Number.isNaN(sizeAsNumber) && sizeAsNumber > 0 && sizeAsNumber <= 10) {size = sizeAsNumber;}
+
+  // Ordenamiento 
+  const sortMap = {
+   nameAsc: ['name', 'ASC'],
+   nameDesc: ['name', 'DESC'],
+   availabilityAsc: ['availability', 'ASC'],
+   availabilityDesc: ['availability', 'DESC'],
+   price: ["price","ASC"],
+   price: ["price", "DESC"],
+   pages: ["pages","ASC"],
+   pages: ["pages", "DESC"],
+   reviews : ["reviews ","ASC"],
+   reviews : ["reviews ", "DESC"],
+   score: ["score","ASC"],
+   score: ["score", "DESC"],
+   publicationYear: ["year","ASC"],
+   publicationYear: ["year", "DESC"],
+   stock: ["stock","ASC"],
+   stock: ["stock", "DESC"],
+   timestamps: ["timestamps","ASC"],
+   timestamps: ["timestamps", "DESC"],
+  };
+  // TODO: timestamps y chequear availability
+  //TODO chequear filtros de arrays
+try {
+  
+  if (query.order && sortMap[query.order]) {
+    order.push(sortMap[query.order]);
   }
-  if (!Number.isNaN(sizeAsNumber) && sizeAsNumber > 0 && sizeAsNumber <= 10) {
-    size = sizeAsNumber;
+
+  // Filtros condicionales para géneros literarios y autores
+  if (name) {filter.name = { [Op.iLike]: `%${name}%` };}
+    // Si genre es un array de IDs, puedes convertirlo a un array de enteros
+  if (genre) {
+    const genreIds = genre.split(',').map(Number);
+    filter.genre = genreIds;
+  }
+  // Si author es un array de IDs, puedes convertirlo a un array de enteros
+  if (author) {
+    const authorIds = author.split(',').map(Number);
+    filter.author = authorIds;
   }
 
- // Filtros condicionales para géneros literarios y autores
- const filter = {};
-
- if (author) {
-   filter.author = author;
- }
-
- if (genre) {
-   filter.genre = genre;
- }
+// Filtro rango precios
+  if (priceMin && !Number.isNaN(priceMin)) {filter.sellPrice = { [Op.gte]: priceMin };}
+  if (priceMax && !Number.isNaN(priceMax)) {filter.sellPrice = { ...filter.sellPrice, [Op.lte]: priceMax };}
+// Filtro average Score
+  if (averageScoreMin && !Number.isNaN(averageScoreMin)) {filter.averageScore = { [Op.gte]: averageScoreMin };}
+  if (averageScoreMax && !Number.isNaN(averageScoreMax)) {filter.averageScore = { ...filter.averageScore, [Op.lte]: averageScoreMax };}
+// Filtro cantidad de paginas
+  if (pagesMin && !Number.isNaN(pagesMin)) {filter.pages = { [Op.gte]: pagesMin };}
+  if (pagesMax && !Number.isNaN(pagesMax)) {filter.pages = { ...filter.pages, [Op.lte]: pagesMax };}
+  
+  if (availability) {filter.availability = availability === 'true';}
 
  const books = await Book.findAndCountAll({
    where: filter,
+   order,
    limit: size,
    offset: (page - 1) * size,
  });
+  return books;
 
- return books;
+} catch (error) {
+  console.log(error)  
+  }
 }
 
 const getBookByNameController = async (title) => {
@@ -70,6 +132,7 @@ const createBookController = async (
   publicationYear,
   images,
   sellPrice,
+  pages,
   stock
 ) => {
   /*
@@ -83,6 +146,7 @@ const createBookController = async (
       title: title,
       author: author,
       genre: genre,
+      pages: pages,
       publicationYear: publicationYear,
     }
   })
@@ -95,6 +159,7 @@ const createBookController = async (
     publicationYear,
     images,
     sellPrice,
+    pages,
     stock
   })
   for (let i = 0; i < genre.length; i++) {
@@ -112,6 +177,7 @@ const updateBookController = async (
   publicationYear,
   images,
   sellPrice,
+  pages,
   stock,
   availability
 ) => {
@@ -125,6 +191,7 @@ const updateBookController = async (
       publicationYear,
       images,
       sellPrice,
+      pages,
       stock,
       availability
     )

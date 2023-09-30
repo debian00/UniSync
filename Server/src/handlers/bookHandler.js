@@ -49,6 +49,7 @@ const createBookHandler = async (req, res) => {
         publicationYear,
         images,
         sellPrice,
+        pages,
         stock
     } = req.body
     try {
@@ -60,6 +61,7 @@ const createBookHandler = async (req, res) => {
             publicationYear,
             images,
             sellPrice,
+            pages,
             stock
         )
         res.status(200).json(response)
@@ -79,6 +81,7 @@ const updateBookHandler = async (req, res) => {
         publicationYear,
         images,
         sellPrice,
+        pages,
         stock,
         availability
     } = req.body
@@ -92,6 +95,7 @@ const updateBookHandler = async (req, res) => {
             publicationYear,
             images,
             sellPrice,
+            pages,
             stock,
             availability
         )
