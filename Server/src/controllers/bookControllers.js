@@ -1,4 +1,4 @@
-const { Book, Genre, Review } = require("../database/db");
+const { Book, Author, Genre, Review } = require("../database/db");
 const { Op } = require("sequelize");
 
 const getAllBooksController = async (req) => {
@@ -8,27 +8,20 @@ const getAllBooksController = async (req) => {
   const pageAsNumber = Number.parseInt(query.page);
   const sizeAsNumber = Number.parseInt(query.size);
   const {
-    name,
+    title,
     genre,
     author,
-    priceMin,
-    priceMax,
+    sellPriceMin,
+    sellPriceMax,
     pagesMin,
     pagesMax,
-    scoreMin,
-    scoreMax,
+    averageScoreMin,
+    averageScoreMax,
+    stockMin,
+    stockMax,
     availability,
   } = req.query;
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
+
   //Logica para la pagina y numero de items
   const order = [];
   const filter = {};
@@ -39,57 +32,71 @@ const getAllBooksController = async (req) => {
 
   // Ordenamiento 
   const sortMap = {
-   nameAsc: ['name', 'ASC'],
-   nameDesc: ['name', 'DESC'],
+   titleAsc: ['title', 'ASC'],
+   titleDesc: ['title', 'DESC'],
    availabilityAsc: ['availability', 'ASC'],
    availabilityDesc: ['availability', 'DESC'],
-   price: ["price","ASC"],
-   price: ["price", "DESC"],
-   pages: ["pages","ASC"],
-   pages: ["pages", "DESC"],
-   reviews : ["reviews ","ASC"],
-   reviews : ["reviews ", "DESC"],
-   score: ["score","ASC"],
-   score: ["score", "DESC"],
-   publicationYear: ["year","ASC"],
-   publicationYear: ["year", "DESC"],
-   stock: ["stock","ASC"],
-   stock: ["stock", "DESC"],
-   timestamps: ["timestamps","ASC"],
-   timestamps: ["timestamps", "DESC"],
+   sellPriceAsc: ["sellPrice","ASC"],
+   sellPriceDesc: ["sellPrice", "DESC"],
+   pagesAsc: ["pages","ASC"],
+   pagesDesc: ["pages", "DESC"],
+   reviewsAsc : ["reviews ","ASC"],
+   reviewsDesc : ["reviews ", "DESC"],
+   scoreAsc: ["score","ASC"],
+   scoreDesc: ["score", "DESC"],
+   publicationYearAsc: ["year","ASC"],
+   publicationYearDesc: ["year", "DESC"],
+   stockAsc: ["stock","ASC"],
+   stockDesc: ["stock", "DESC"],
+   //pendiente
+   timestampsAsc: ["timestamps","ASC"],
+   timestampsDesc: ["timestamps", "DESC"],
   };
-  // TODO: timestamps y chequear availability
-  //TODO chequear filtros de arrays
+  // TODO: timestamps
+
 try {
-  
+  console.log(genre)
+  console.log(genre.length === 1)
+  console.log(typeof genre)
   if (query.order && sortMap[query.order]) {
     order.push(sortMap[query.order]);
   }
-
   // Filtros condicionales para géneros literarios y autores
-  if (name) {filter.name = { [Op.iLike]: `%${name}%` };}
-    // Si genre es un array de IDs, puedes convertirlo a un array de enteros
-  if (genre) {
-    const genreIds = genre.split(',').map(Number);
-    filter.genre = genreIds;
-  }
-  // Si author es un array de IDs, puedes convertirlo a un array de enteros
-  if (author) {
-    const authorIds = author.split(',').map(Number);
-    filter.author = authorIds;
-  }
+  if (title) {filter.title = { [Op.iLike]: `%${title}%` };}
+  // Si genre es un array de IDs, puedes convertirlo a un array de enteros
+  let genreIds = null
 
-// Filtro rango precios
-  if (priceMin && !Number.isNaN(priceMin)) {filter.sellPrice = { [Op.gte]: priceMin };}
-  if (priceMax && !Number.isNaN(priceMax)) {filter.sellPrice = { ...filter.sellPrice, [Op.lte]: priceMax };}
-// Filtro average Score
+  if (genre) {
+    if(genre.length === 1){
+      filter.genre = {[Op.is]:genre};
+    }
+    else {
+      genreIds = genre.split(',').map(Number);
+      filter.genre = {[Op.contains]: genreIds};
+    }
+  }
+    console.log(genreIds)
+    console.log(genreIds)
+    console.log(filter.genre)
+  
+  if (author) {filter.author = { [Op.iLike]: `%${author}%` };}
+  // Filtro rango precios
+  if (sellPriceMin && !Number.isNaN(sellPriceMin)) {filter.sellPrice = { [Op.gte]: sellPriceMin };}
+  if (sellPriceMax && !Number.isNaN(sellPriceMax)) {filter.sellPrice = { ...filter.sellPrice, [Op.lte]: sellPriceMax };}
+  // Filtro average Score
   if (averageScoreMin && !Number.isNaN(averageScoreMin)) {filter.averageScore = { [Op.gte]: averageScoreMin };}
   if (averageScoreMax && !Number.isNaN(averageScoreMax)) {filter.averageScore = { ...filter.averageScore, [Op.lte]: averageScoreMax };}
-// Filtro cantidad de paginas
+  
+  // Filtro cantidad de paginas
   if (pagesMin && !Number.isNaN(pagesMin)) {filter.pages = { [Op.gte]: pagesMin };}
+  
   if (pagesMax && !Number.isNaN(pagesMax)) {filter.pages = { ...filter.pages, [Op.lte]: pagesMax };}
+  // Filtro stock
+  if (stockMin && !Number.isNaN(stockMin)) {filter.stock = { [Op.gte]: stockMin };}
+  if (stockMax && !Number.isNaN(stockMax)) {filter.stock = { ...filter.stock, [Op.lte]: stockMax };}
   
   if (availability) {filter.availability = availability === 'true';}
+
 
  const books = await Book.findAndCountAll({
    where: filter,
@@ -140,7 +147,6 @@ const createBookController = async (
   validamos que no exista un libro que cuente con los
   siguientes campos iguales a uno ya creado, asi evitamos
   duplicados
-  */
   const book = await Book.findOne({
     where: {
       title: title,
@@ -151,6 +157,26 @@ const createBookController = async (
     }
   })
   if (book) { return "Libro existente" }
+  */
+ let authorId = null
+ if(author){const newAuthor = await Author.findOne({where:{name:author}})
+    if(!newAuthor){
+      let newDBAuthor = await Author.create({name:author})
+      console.log(newDBAuthor)
+      authorId=newDBAuthor.dataValues.id
+  }
+}
+    console.log("----------------------------")
+    console.log(title)
+    console.log(author)
+    console.log(description)
+    console.log(genre)
+    console.log(publicationYear)
+    console.log(images)
+    console.log(sellPrice)
+    console.log(pages)
+    console.log(stock)
+    console.log("----------------------------")
   const newBook = await Book.create({
     title,
     author,
@@ -182,6 +208,11 @@ const updateBookController = async (
   availability
 ) => {
   try {
+    // Si se vendieron todos los libros y stock llega a 0, se pausa la publicacion
+    // Si agrego stock, se reanuda
+    if(stock && stock === 0){availability = false}
+    if(stock && stock >=1){availability = true}
+
     const updateBook = await Book.findOne({ where: { id: id } })
     await updateBook.update(
       title,
