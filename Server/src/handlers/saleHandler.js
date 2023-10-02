@@ -91,7 +91,7 @@ const deleteSaleHandler = async (req, res) => {
     const {id} = req.params
     try {
       const response = await deleteSaleController(id)
-      res.status(204).json(response)
+      res.status(204).json(` La venta cuyo id es:  ${id} se borró con éxito`)
     } catch (error) {
       console.log(error)
       res.status(404).json(` La venta cuyo id es:  ${id} no se pudo borrar`)
