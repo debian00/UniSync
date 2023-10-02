@@ -1,4 +1,4 @@
-const { Book, Genre, Review } = require("../database/db");
+const { Book, Author, Genre, Review } = require("../database/db");
 const { Op } = require("sequelize");
 
 const getAllBooksController = async (req) => {
@@ -8,30 +8,24 @@ const getAllBooksController = async (req) => {
   const pageAsNumber = Number.parseInt(query.page);
   const sizeAsNumber = Number.parseInt(query.size);
   const {
-    name,
+    title,
     genre,
     author,
-    priceMin,
-    priceMax,
+    sellPriceMin,
+    sellPriceMax,
     pagesMin,
     pagesMax,
-    scoreMin,
-    scoreMax,
+    averageScoreMin,
+    averageScoreMax,
+    stockMin,
+    stockMax,
     availability,
   } = req.query;
-  
-  
-  
-  
-  
-  
-  
-  
-  
   
   //Logica para la pagina y numero de items
   const order = [];
   const filter = {};
+  let genreIds = null
   let page = 1;
   let size = 10;
   if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {page = pageAsNumber;}
@@ -39,57 +33,67 @@ const getAllBooksController = async (req) => {
 
   // Ordenamiento 
   const sortMap = {
-   nameAsc: ['name', 'ASC'],
-   nameDesc: ['name', 'DESC'],
+  // Ordenamiento user
+   titleAsc: ['title', 'ASC'],
+   titleDesc: ['title', 'DESC'],
+   sellPriceAsc: ["sellPrice","ASC"],
+   sellPriceDesc: ["sellPrice", "DESC"],
+   pagesAsc: ["pages","ASC"],
+   pagesDesc: ["pages", "DESC"],
+   reviewsAsc : ["reviews ","ASC"],
+   reviewsDesc : ["reviews ", "DESC"],
+   averageScoreAsc: ["averageScore","ASC"],
+   averageScoreDesc: ["averageScore", "DESC"],
+   publicationYearAsc: ["year","ASC"],
+   publicationYearDesc: ["year", "DESC"],
+
+   //Ordenamiento Admin
    availabilityAsc: ['availability', 'ASC'],
    availabilityDesc: ['availability', 'DESC'],
-   price: ["price","ASC"],
-   price: ["price", "DESC"],
-   pages: ["pages","ASC"],
-   pages: ["pages", "DESC"],
-   reviews : ["reviews ","ASC"],
-   reviews : ["reviews ", "DESC"],
-   score: ["score","ASC"],
-   score: ["score", "DESC"],
-   publicationYear: ["year","ASC"],
-   publicationYear: ["year", "DESC"],
-   stock: ["stock","ASC"],
-   stock: ["stock", "DESC"],
-   timestamps: ["timestamps","ASC"],
-   timestamps: ["timestamps", "DESC"],
+   stockAsc: ["stock","ASC"],
+   stockDesc: ["stock", "DESC"],
+   createdAtAsc: ["createdAt","ASC"],
+   createdAtDesc: ["createdAt", "DESC"],
   };
-  // TODO: timestamps y chequear availability
-  //TODO chequear filtros de arrays
+
 try {
   
   if (query.order && sortMap[query.order]) {
     order.push(sortMap[query.order]);
   }
-
   // Filtros condicionales para géneros literarios y autores
-  if (name) {filter.name = { [Op.iLike]: `%${name}%` };}
-    // Si genre es un array de IDs, puedes convertirlo a un array de enteros
+  if (title) {filter.title = { [Op.iLike]: `%${title}%` };}
+  
+ // recibo un solo numero de genre tengo que definirlo como array para pasar a sequelize
+ // recibo multiples genres, lo spliteo en un array de num y paso a sequelize
   if (genre) {
-    const genreIds = genre.split(',').map(Number);
-    filter.genre = genreIds;
+    if(genre.length === 1){
+      let genreNum = [Number(genre)]
+      filter.genre = {[Op.contains]: genreNum};
+    }
+    else {
+      genreIds = genre.split(',').map(Number);
+      filter.genre = {[Op.contains]: genreIds};
+    }
   }
-  // Si author es un array de IDs, puedes convertirlo a un array de enteros
-  if (author) {
-    const authorIds = author.split(',').map(Number);
-    filter.author = authorIds;
-  }
-
-// Filtro rango precios
-  if (priceMin && !Number.isNaN(priceMin)) {filter.sellPrice = { [Op.gte]: priceMin };}
-  if (priceMax && !Number.isNaN(priceMax)) {filter.sellPrice = { ...filter.sellPrice, [Op.lte]: priceMax };}
-// Filtro average Score
+  
+  if (author) {filter.author = { [Op.iLike]: `%${author}%` };}
+  // Filtro rango precios
+  if (sellPriceMin && !Number.isNaN(sellPriceMin)) {filter.sellPrice = { [Op.gte]: sellPriceMin };}
+  if (sellPriceMax && !Number.isNaN(sellPriceMax)) {filter.sellPrice = { ...filter.sellPrice, [Op.lte]: sellPriceMax };}
+  // Filtro average Score
   if (averageScoreMin && !Number.isNaN(averageScoreMin)) {filter.averageScore = { [Op.gte]: averageScoreMin };}
   if (averageScoreMax && !Number.isNaN(averageScoreMax)) {filter.averageScore = { ...filter.averageScore, [Op.lte]: averageScoreMax };}
-// Filtro cantidad de paginas
+  
+  // Filtro cantidad de paginas
   if (pagesMin && !Number.isNaN(pagesMin)) {filter.pages = { [Op.gte]: pagesMin };}
   if (pagesMax && !Number.isNaN(pagesMax)) {filter.pages = { ...filter.pages, [Op.lte]: pagesMax };}
+  // Filtro stock
+  if (stockMin && !Number.isNaN(stockMin)) {filter.stock = { [Op.gte]: stockMin };}
+  if (stockMax && !Number.isNaN(stockMax)) {filter.stock = { ...filter.stock, [Op.lte]: stockMax };}
   
   if (availability) {filter.availability = availability === 'true';}
+
 
  const books = await Book.findAndCountAll({
    where: filter,
@@ -133,24 +137,43 @@ const createBookController = async (
   images,
   sellPrice,
   pages,
-  stock
+  stock,
+  availability
 ) => {
-  /*
-  Ya que no tenemos nombre unico para publicar un libro
-  validamos que no exista un libro que cuente con los
-  siguientes campos iguales a uno ya creado, asi evitamos
-  duplicados
-  */
-  const book = await Book.findOne({
-    where: {
-      title: title,
-      author: author,
-      genre: genre,
-      pages: pages,
-      publicationYear: publicationYear,
-    }
-  })
-  if (book) { return "Libro existente" }
+// Id que voy a pasarle a la relacion
+ let authorId = null
+
+// Los siguientes condicionales de typeof son para evitar problemas de comunicacion con el front.
+// En caso de que envien el id o el string, en caso de que envien el string del input, no pasa nada.
+
+ // Si recibo un autor desde el front como string
+ if(typeof author == "string"){
+      // Si recibo un libro sin autor, busco en DB un autor "Unknown" y asigno su id para la relacion 
+       if(!author){
+        const existentAuthor = await Author.findOne({where:{name:"Unknown"}})
+        authorId=existentAuthor.dataValues.id
+      // Si no existe el "unknown" en la DB, lo creo y asigno su id para la relacion
+      // Esta funcion se ejecuta una unica vez hasta que se haga un force en la DB
+        if(!existentAuthor){
+          let newDBAuthor = await Author.create({name:"Unknown"})
+          authorId=newDBAuthor.dataValues.id
+        }}
+      
+      //Busco el autor y si no existe, lo creo
+       if(author){const existentAuthor = await Author.findOne({where:{name:author}})
+        authorId=existentAuthor.dataValues.id
+        if(!existentAuthor){
+          let newDBAuthor = await Author.create({name:author})
+          authorId=newDBAuthor.dataValues.id
+        }}}
+
+      // Si recibo el autor como numero desde el front ejecuto esto
+if(typeof author == "number"){
+      const existentAuthor = await Author.findOne({where:{id:author}})
+      authorId=existentAuthor.dataValues.id
+      author=existentAuthor.dataValues.name
+}
+    
   const newBook = await Book.create({
     title,
     author,
@@ -160,11 +183,14 @@ const createBookController = async (
     images,
     sellPrice,
     pages,
-    stock
+    stock,
+    availability
   })
   for (let i = 0; i < genre.length; i++) {
-  await newBook.addGenre(genre[i])
+    await newBook.addGenre(genre[i])
   }
+  await newBook.setAuthor(authorId)
+  //Las relaciones de autor no figuran en la tabla intermedia pero setea el userId del book
   return newBook
 }
 
@@ -182,6 +208,11 @@ const updateBookController = async (
   availability
 ) => {
   try {
+    // Si se vendieron todos los libros y stock llega a 0, se pausa la publicacion
+    // Si agrego stock, se reanuda
+    if(stock && stock === 0){availability = false}
+    if(stock && stock >=1){availability = true}
+
     const updateBook = await Book.findOne({ where: { id: id } })
     await updateBook.update(
       title,

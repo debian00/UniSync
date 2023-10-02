@@ -14,13 +14,13 @@ module.exports = (sequelize) => {
                 allowNull: false
             },
             author: {
-                type: DataTypes.ARRAY(DataTypes.STRING),
+                type: DataTypes.STRING,
             },
             description: {
                 type: DataTypes.TEXT,
             },
             genre: {
-                type: DataTypes.ARRAY(DataTypes.STRING),
+                type: DataTypes.ARRAY(DataTypes.INTEGER),
             },
             publicationYear: {
                 type: DataTypes.INTEGER,
