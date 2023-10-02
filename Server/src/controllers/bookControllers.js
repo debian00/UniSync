@@ -145,7 +145,8 @@ const createBookController = async (
 
 // Los siguientes condicionales de typeof son para evitar problemas de comunicacion con el front.
 // En caso de que envien el id o el string, en caso de que envien el string del input, no pasa nada.
-await Author.findAll()
+const authorsInDb = await Author.findAll()
+let createInDbId= authorsInDb.length+1
  // Si recibo un autor desde el front como string
  if(typeof author == "string"){
       // Si recibo un libro sin autor, busco en DB un autor "Unknown" y asigno su id para la relacion 
@@ -155,7 +156,7 @@ await Author.findAll()
       // Si no existe el "unknown" en la DB, lo creo y asigno su id para la relacion
       // Esta funcion se ejecuta una unica vez hasta que se haga un force en la DB
         if(!existentAuthor){
-          let newDBAuthor = await Author.create({name:"Unknown"})
+          let newDBAuthor = await Author.create({id:createInDbId, name:"Unknown"})
           if(newDBAuthor) {authorId=newDBAuthor.dataValues.id}
         }}
       
@@ -163,7 +164,7 @@ await Author.findAll()
        if(author){const existentAuthor = await Author.findOne({where:{name:author}})
         if(existentAuthor){authorId=existentAuthor.dataValues.id}
         if(!existentAuthor){
-          let newDBAuthor = await Author.create({name:author})
+          let newDBAuthor = await Author.create({id:createInDbId, name:author})
          if(newDBAuthor) {authorId=newDBAuthor.dataValues.id}
         }}}
 
