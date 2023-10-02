@@ -7,6 +7,7 @@ const authorRouter = require('./authorRouter')
 const genreRouter = require('./genreRouter')
 const saleRouter = require('./saleRouter');
 const reviewRouter = require('./reviewRouter');
+const promoRouter = require('./promoRouter')
 const stripeRouter = require('./paymentRoutes/stripeRouter')
 
 const router = Router()
@@ -25,9 +26,12 @@ router.use('/genre', genreRouter)
 //Rutas de ventas
 router.use('/sale', saleRouter)
 //Rutas de reviews
-router.use('/review', reviewRouter)
+router.use('/review',reviewRouter)
+//Ruta enviar promocion
+router.use('/sendmail', promoRouter)
 
 //Rutas de pago
 router.use('/payment', stripeRouter)
+
 
 module.exports = router

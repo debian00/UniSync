@@ -50,8 +50,10 @@ const createBookHandler = async (req, res) => {
         images,
         sellPrice,
         pages,
-        stock
+        stock,
+        availability
     } = req.body
+    
     try {
         const response = await createBookController(
             title,
@@ -62,7 +64,8 @@ const createBookHandler = async (req, res) => {
             images,
             sellPrice,
             pages,
-            stock
+            stock,
+            availability
         )
         res.status(200).json(response)
     } catch (error) {

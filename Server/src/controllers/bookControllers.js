@@ -21,10 +21,11 @@ const getAllBooksController = async (req) => {
     stockMax,
     availability,
   } = req.query;
-
+  
   //Logica para la pagina y numero de items
   const order = [];
   const filter = {};
+  let genreIds = null
   let page = 1;
   let size = 10;
   if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {page = pageAsNumber;}
@@ -32,52 +33,49 @@ const getAllBooksController = async (req) => {
 
   // Ordenamiento 
   const sortMap = {
+  // Ordenamiento user
    titleAsc: ['title', 'ASC'],
    titleDesc: ['title', 'DESC'],
-   availabilityAsc: ['availability', 'ASC'],
-   availabilityDesc: ['availability', 'DESC'],
    sellPriceAsc: ["sellPrice","ASC"],
    sellPriceDesc: ["sellPrice", "DESC"],
    pagesAsc: ["pages","ASC"],
    pagesDesc: ["pages", "DESC"],
    reviewsAsc : ["reviews ","ASC"],
    reviewsDesc : ["reviews ", "DESC"],
-   scoreAsc: ["score","ASC"],
-   scoreDesc: ["score", "DESC"],
+   averageScoreAsc: ["averageScore","ASC"],
+   averageScoreDesc: ["averageScore", "DESC"],
    publicationYearAsc: ["year","ASC"],
    publicationYearDesc: ["year", "DESC"],
+
+   //Ordenamiento Admin
+   availabilityAsc: ['availability', 'ASC'],
+   availabilityDesc: ['availability', 'DESC'],
    stockAsc: ["stock","ASC"],
    stockDesc: ["stock", "DESC"],
-   //pendiente
-   timestampsAsc: ["timestamps","ASC"],
-   timestampsDesc: ["timestamps", "DESC"],
+   createdAtAsc: ["createdAt","ASC"],
+   createdAtDesc: ["createdAt", "DESC"],
   };
-  // TODO: timestamps
 
 try {
-  console.log(genre)
-  console.log(genre.length === 1)
-  console.log(typeof genre)
+  
   if (query.order && sortMap[query.order]) {
     order.push(sortMap[query.order]);
   }
   // Filtros condicionales para géneros literarios y autores
   if (title) {filter.title = { [Op.iLike]: `%${title}%` };}
-  // Si genre es un array de IDs, puedes convertirlo a un array de enteros
-  let genreIds = null
-
+  
+ // recibo un solo numero de genre tengo que definirlo como array para pasar a sequelize
+ // recibo multiples genres, lo spliteo en un array de num y paso a sequelize
   if (genre) {
     if(genre.length === 1){
-      filter.genre = {[Op.is]:genre};
+      let genreNum = [Number(genre)]
+      filter.genre = {[Op.contains]: genreNum};
     }
     else {
       genreIds = genre.split(',').map(Number);
       filter.genre = {[Op.contains]: genreIds};
     }
   }
-    console.log(genreIds)
-    console.log(genreIds)
-    console.log(filter.genre)
   
   if (author) {filter.author = { [Op.iLike]: `%${author}%` };}
   // Filtro rango precios
@@ -89,7 +87,6 @@ try {
   
   // Filtro cantidad de paginas
   if (pagesMin && !Number.isNaN(pagesMin)) {filter.pages = { [Op.gte]: pagesMin };}
-  
   if (pagesMax && !Number.isNaN(pagesMax)) {filter.pages = { ...filter.pages, [Op.lte]: pagesMax };}
   // Filtro stock
   if (stockMin && !Number.isNaN(stockMin)) {filter.stock = { [Op.gte]: stockMin };}
@@ -140,43 +137,45 @@ const createBookController = async (
   images,
   sellPrice,
   pages,
-  stock
+  stock,
+  availability
 ) => {
-  /*
-  Ya que no tenemos nombre unico para publicar un libro
-  validamos que no exista un libro que cuente con los
-  siguientes campos iguales a uno ya creado, asi evitamos
-  duplicados
-  const book = await Book.findOne({
-    where: {
-      title: title,
-      author: author,
-      genre: genre,
-      pages: pages,
-      publicationYear: publicationYear,
-    }
-  })
-  if (book) { return "Libro existente" }
-  */
+// Id que voy a pasarle a la relacion
  let authorId = null
- if(author){const newAuthor = await Author.findOne({where:{name:author}})
-    if(!newAuthor){
-      let newDBAuthor = await Author.create({name:author})
-      console.log(newDBAuthor)
-      authorId=newDBAuthor.dataValues.id
-  }
+
+// Los siguientes condicionales de typeof son para evitar problemas de comunicacion con el front.
+// En caso de que envien el id o el string, en caso de que envien el string del input, no pasa nada.
+await Author.findAll()
+ // Si recibo un autor desde el front como string
+ if(typeof author == "string"){
+      // Si recibo un libro sin autor, busco en DB un autor "Unknown" y asigno su id para la relacion 
+       if(!author){
+        const existentAuthor = await Author.findOne({where:{name:"Unknown"}})
+        if(existentAuthor){authorId=existentAuthor.dataValues.id}
+      // Si no existe el "unknown" en la DB, lo creo y asigno su id para la relacion
+      // Esta funcion se ejecuta una unica vez hasta que se haga un force en la DB
+        if(!existentAuthor){
+          let newDBAuthor = await Author.create({name:"Unknown"})
+          if(newDBAuthor) {authorId=newDBAuthor.dataValues.id}
+        }}
+      
+      //Busco el autor y si no existe, lo creo
+       if(author){const existentAuthor = await Author.findOne({where:{name:author}})
+        if(existentAuthor){authorId=existentAuthor.dataValues.id}
+        if(!existentAuthor){
+          let newDBAuthor = await Author.create({name:author})
+         if(newDBAuthor) {authorId=newDBAuthor.dataValues.id}
+        }}}
+
+      // Si recibo el autor como numero desde el front ejecuto esto
+if(typeof author == "number"){
+      const existentAuthor = await Author.findOne({where:{id:author}})
+      if (existentAuthor){
+        authorId=existentAuthor.dataValues.id
+        author=existentAuthor.dataValues.name
+      }
 }
-    console.log("----------------------------")
-    console.log(title)
-    console.log(author)
-    console.log(description)
-    console.log(genre)
-    console.log(publicationYear)
-    console.log(images)
-    console.log(sellPrice)
-    console.log(pages)
-    console.log(stock)
-    console.log("----------------------------")
+    
   const newBook = await Book.create({
     title,
     author,
@@ -186,11 +185,14 @@ const createBookController = async (
     images,
     sellPrice,
     pages,
-    stock
+    stock,
+    availability
   })
   for (let i = 0; i < genre.length; i++) {
-  await newBook.addGenre(genre[i])
+    await newBook.addGenre(genre[i])
   }
+  await newBook.setAuthor(authorId)
+  //Las relaciones de autor no figuran en la tabla intermedia pero setea el userId del book
   return newBook
 }
 
