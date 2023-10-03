@@ -13,7 +13,7 @@ const saleRouter = Router();
 //Trae todas las ventas
 saleRouter.get("/", getAllSaleHandler),
 //Trae una venta buscada por Id
-saleRouter.get("/", getSaleByIdHandler);
+saleRouter.get("/:id", getSaleByIdHandler);
 //Crea una venta
 saleRouter.post("/create", createSaleHandler);
 //Actualiza datos de una venta existente

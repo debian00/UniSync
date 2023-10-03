@@ -12,7 +12,7 @@ const reviewRouter = Router();
 //Trae todas las ventas
 reviewRouter.get("/", getAllReviewsHandler),
 //Trae una venta buscada por Id
-reviewRouter.get("/", getReviewByIdHandler);
+reviewRouter.get("/:id", getReviewByIdHandler);
 //Crea una venta
 reviewRouter.post("/create", createReviewHandler);
 //Actualiza datos de una venta existente
