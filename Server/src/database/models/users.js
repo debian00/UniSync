@@ -14,6 +14,18 @@ module.exports = (sequelize) => {
       type: DataTypes.STRING,
       allowNull: false
     },
+    profilePic: {
+      type: DataTypes.TEXT,
+      allowNull: true
+    },
+    birthDate: {
+      type: DataTypes.DATE,
+      allowNull: true
+    },
+    phoneNumber: {
+      type: DataTypes.STRING, // Cambiado: NUMBER a STRING si incluye caracteres no numéricos
+      allowNull: true,
+    },
     email: {
       type: DataTypes.STRING,
       unique: true,
@@ -28,6 +40,10 @@ module.exports = (sequelize) => {
       type: DataTypes.ENUM("admin", "user"),
       allowNull: true,
       defaultValue: "user",
+    },
+    hide: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
   },
     {

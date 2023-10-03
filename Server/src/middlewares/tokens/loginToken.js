@@ -6,8 +6,8 @@ const loginToken = async (user) => {
     _id: user._id,
     role: user.role
   },
-  process.env.JWT_SECRET,
-  {expiresIn: "1h"})
+    process.env.JWT_SECRET,
+    { expiresIn: "1h" })
 }
 
-module.exports = {loginToken}
+module.exports = { loginToken }
