@@ -1,4 +1,4 @@
-const { User } = require("../database/db");
+const { User, Review } = require("../database/db");
 const { Op } = require("sequelize");
 const { encrypt } = require('../middlewares/hashPassword');
 const { registerToken } = require('../middlewares/tokens/registerToken');
@@ -61,6 +61,17 @@ const getUsersByIdController = async (id) => {
       where: {
         id: id,
       },
+      attributes: [
+        "id",
+        "name",
+        "userName",
+        "profilePic",
+        "birthDate",
+        "phoneNumber",
+        "email",
+        "userType"
+      ],
+      include: Review
     });
     return userFound;
   } catch (error) {
@@ -109,14 +120,15 @@ const createUserController = async ({
 
 //Actualiza informacion de un usuario
 const updateUserController = async ({
-  userName,
   name,
+  userName,
   profilePic,
   phoneNumber,
   email,
   password,
   birthDate,
 }) => {
+
   try {
     const updateUser = await User.findOne({
       where: { userName: userName },
@@ -130,6 +142,7 @@ const updateUserController = async ({
       const hashedPassword = await encrypt(password);
       await updateUser.update({
         name,
+        userName,
         profilePic,
         phoneNumber,
         email,

@@ -6,7 +6,6 @@ const { Op } = require("sequelize");
 const getAllAuthorsController = async () => {
   try {
     const authors = await Author.findAll();
-    //TODO: crear unknown aca
     return authors;
   } catch (error) {
     console.error(error);
