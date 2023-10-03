@@ -4,7 +4,8 @@ const {
     getReviewByIdHandler,
     createReviewHandler,
     updateReviewHandler,
-    deleteReviewHandler
+    deleteReviewHandler,
+    bookReviewHandler
 } = require("../handlers/reviewHandler");
 
 const reviewRouter = Router();
@@ -19,5 +20,6 @@ reviewRouter.post("/create", createReviewHandler);
 reviewRouter.put("/update/:id", updateReviewHandler);
 //Elimina una venta
 reviewRouter.delete("/delete/:id", deleteReviewHandler);
-
+//Review hechas al libro
+reviewRouter.get("/book/:id", bookReviewHandler)
 module.exports = reviewRouter;
