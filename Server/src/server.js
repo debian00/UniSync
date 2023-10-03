@@ -3,6 +3,8 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const session = require("express-session");
+const pgSession = require('connect-pg-simple')(session);
+const { sequelize } = require('./database/db')
 const passport = require("passport");
 const router = require('./routes/index')
 
@@ -16,9 +18,16 @@ server.use(cors({}))
 //session express
 server.use(
   session({
+    store: new pgSession({
+      // Insert connect-pg-simple options here
+      pool: sequelize,
+      tableName: 'session'
+    }),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
+    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
+    // Insert express-session options here
   })
 );
 
