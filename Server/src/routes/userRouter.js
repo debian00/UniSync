@@ -23,7 +23,7 @@ userRouter.get("/:id", getUsersByIdHandler);
 //Crear usuario nuevo
 userRouter.post("/create", createUserHandler);
 //Actualizar datos de un usuario existente
-userRouter.put("/update", updateUserHandler);
+userRouter.put("/update/:id", updateUserHandler);
 //Eliminar usuario
 userRouter.delete("/delete/:id", deleteUserHandler);
 // Suspender usuario

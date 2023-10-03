@@ -8,7 +8,7 @@ module.exports = (sequelize) => {
       defaultValue: DataTypes.UUIDV4, // Cambiado a UUIDV4
     },
     score: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL(4, 2),
       allowNull: false,
     },
     comment: {

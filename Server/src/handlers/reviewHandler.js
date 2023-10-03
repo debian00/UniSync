@@ -3,7 +3,8 @@ const {
     getReviewByIdController,
     createReviewController,
     updateReviewController,
-    deleteReviewController
+    deleteReviewController,
+    bookReviewController
 } = require("../controllers/reviewControllers");
 
 //Trae todas las reviews
@@ -58,7 +59,7 @@ const updateReviewHandler = async (req, res) => {
         bookId
      } = req.body
     try {
-        const modifiedReview = await updateReviewController({
+        const modifiedReview = await updateReviewController(id,{
             score,
             comment,
             bookId
@@ -80,10 +81,22 @@ const deleteReviewHandler = async (req, res) => {
       res.status(404).json(` La review cuyo id es:  ${id} no se pudo borrar`)
     }
   }
+
+const bookReviewHandler = async (req,res) => {
+  const {id} = req.params
+  try {
+    const response = await bookReviewController(id)
+    res.status(200).json(response)
+  } catch (error) {
+    console.log(error)
+    res.status(404).json("No hay reviews para este libro")
+  }
+}
 module.exports = {
     getAllReviewsHandler,
     getReviewByIdHandler,
     createReviewHandler,
     updateReviewHandler,
-    deleteReviewHandler
+    deleteReviewHandler,
+    bookReviewHandler
 }

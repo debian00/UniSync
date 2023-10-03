@@ -13,7 +13,7 @@ const {
   forbidAdminPermissionsController
 } = require('../controllers/userControllers')
 
-
+//TODO: eliminar contraseñas de pedidos
 //Trae a todos los usuarios
 const getAllUsersHandler = async (req, res) => {
   try {
@@ -45,6 +45,7 @@ const getUserByNameOrEmailHandler = async (req, res) => {
 const getUsersByIdHandler = async (req, res) => {
   const { id } = req.params
   try {
+    console.log("estoy aca")
     const response = await getUsersByIdController(id)
     res.status(200).json(response)
   } catch (error) {
@@ -89,21 +90,23 @@ const updateUserHandler = async (req, res) => {
   const {id} = req.params
   const {
     name,
+    userName,
     profilePic,
     phoneNumber,
+    birthDate,
     email,
     password,
-    birthDate,
   } = req.body
   try {
     const updatedUser = await updateUserController({
-      id,
       name,
+      userName,
       profilePic,
-      birthDate,
       phoneNumber,
+      birthDate,
       email,
-      password
+      password,
+      id,
     })
     res.status(200).json(updatedUser)
   } catch (error) {
