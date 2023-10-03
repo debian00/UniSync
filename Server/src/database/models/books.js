@@ -14,13 +14,13 @@ module.exports = (sequelize) => {
                 allowNull: false
             },
             author: {
-                type: DataTypes.ARRAY(DataTypes.STRING),
+                type: DataTypes.STRING,
             },
             description: {
                 type: DataTypes.TEXT,
             },
-            gender: {
-                type: DataTypes.ARRAY(DataTypes.STRING),
+            genre: {
+                type: DataTypes.ARRAY(DataTypes.INTEGER),
             },
             publicationYear: {
                 type: DataTypes.INTEGER,
@@ -31,8 +31,11 @@ module.exports = (sequelize) => {
             sellPrice: {
                 type: DataTypes.INTEGER,
             },
+            pages: {
+                type: DataTypes.INTEGER,
+            },
             averageScore: {
-                type: DataTypes.FLOAT,
+                type: DataTypes.DECIMAL(4, 2),
                 defaultValue: 0.0,
             },
             numberOfReviews: {
@@ -48,6 +51,6 @@ module.exports = (sequelize) => {
             }
 
         },
-        { timestamps: false }
+        { timestamps: true }
     );
 };

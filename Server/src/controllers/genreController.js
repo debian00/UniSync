@@ -51,8 +51,11 @@ const getGenreByIdController = async (id) => {
 //Publica un nuevo género
 const createGenreController = async ({ name }) => {
   try {
+    const existent = await Genre.findOne({where:{name:name}})
+    if(!existent){
     const response = await Genre.create({ name });
-    return response;
+    return response;}
+    return "El genero ya existe"
   } catch (error) {
     console.error(error);
     throw error;

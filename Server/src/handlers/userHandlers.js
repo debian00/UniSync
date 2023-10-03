@@ -8,10 +8,12 @@ const {
   getUsersByIdController,
   updateUserController,
   restoreUserByIdController,
-  sleepUserByIdController
+  sleepUserByIdController,
+  allowAdminPermissionsController,
+  forbidAdminPermissionsController
 } = require('../controllers/userControllers')
 
-
+//TODO: eliminar contraseñas de pedidos
 //Trae a todos los usuarios
 const getAllUsersHandler = async (req, res) => {
   try {
@@ -43,6 +45,7 @@ const getUserByNameOrEmailHandler = async (req, res) => {
 const getUsersByIdHandler = async (req, res) => {
   const { id } = req.params
   try {
+    console.log("estoy aca")
     const response = await getUsersByIdController(id)
     res.status(200).json(response)
   } catch (error) {
@@ -86,24 +89,24 @@ const createUserHandler = async (req, res) => {
 const updateUserHandler = async (req, res) => {
   const {id} = req.params
   const {
-    userName,
     name,
+    userName,
     profilePic,
     phoneNumber,
+    birthDate,
     email,
     password,
-    birthDate,
   } = req.body
   try {
     const updatedUser = await updateUserController({
-      id,
       name,
       userName,
       profilePic,
-      birthDate,
       phoneNumber,
+      birthDate,
       email,
-      password
+      password,
+      id,
     })
     res.status(200).json(updatedUser)
   } catch (error) {
@@ -151,6 +154,31 @@ const restoreUserByIdHandler = async (req, res) => {
   }
 }
 
+
+//Dar permisos de administrador
+const allowAdminPermissionsHandler = async (req, res) => {
+  const {id} = req.params
+  try {
+    const response = await allowAdminPermissionsController(id)
+    res.status(200).json(response)
+  } catch (error) {
+    res.status(404).json("Usuario no encontrado")
+  }
+}
+
+
+//Quitar permisos de administrador
+const forbidAdminPermissionsHandler = async (req, res) => {
+  const {id} = req.params
+  try {
+    const response = await forbidAdminPermissionsController(id)
+    res.status(200).json(response)
+  } catch (error) {
+    res.status(404).json("Usuario no encontrado")
+  }
+}
+
+
 module.exports = {
   getAllUsersHandler,
   getUserByNameOrEmailHandler, 
@@ -159,5 +187,7 @@ module.exports = {
   updateUserHandler, 
   deleteUserHandler,
   sleepUserByIdHandler,
-  restoreUserByIdHandler
+  restoreUserByIdHandler,
+  forbidAdminPermissionsHandler,
+  allowAdminPermissionsHandler
 }

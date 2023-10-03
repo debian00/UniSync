@@ -38,6 +38,7 @@ Book.belongsToMany(Genre, { through: 'bookGenre' });
 Genre.belongsToMany(Book, { through: 'bookGenre' });
 
 //Relaciones de User
+//Reviews que HACE el usuario a los libros
 User.hasMany(Review);
 Review.belongsTo(User);
 

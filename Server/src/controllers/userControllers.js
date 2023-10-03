@@ -1,4 +1,4 @@
-const { User } = require("../database/db");
+const { User, Review } = require("../database/db");
 const { Op } = require("sequelize");
 const { encrypt } = require('../middlewares/hashPassword');
 const { registerToken } = require('../middlewares/tokens/registerToken');
@@ -61,6 +61,17 @@ const getUsersByIdController = async (id) => {
       where: {
         id: id,
       },
+      attributes: [
+        "id",
+        "name",
+        "userName",
+        "profilePic",
+        "birthDate",
+        "phoneNumber",
+        "email",
+        "userType"
+      ],
+      include: Review
     });
     return userFound;
   } catch (error) {
@@ -109,14 +120,15 @@ const createUserController = async ({
 
 //Actualiza informacion de un usuario
 const updateUserController = async ({
-  userName,
   name,
+  userName,
   profilePic,
   phoneNumber,
   email,
   password,
   birthDate,
 }) => {
+
   try {
     const updateUser = await User.findOne({
       where: { userName: userName },
@@ -130,6 +142,7 @@ const updateUserController = async ({
       const hashedPassword = await encrypt(password);
       await updateUser.update({
         name,
+        userName,
         profilePic,
         phoneNumber,
         email,
@@ -204,6 +217,37 @@ const restoreUserByIdController = async (id) => {
 };
 
 
+//Dar permisos de administrador
+const allowAdminPermissionsController = async (id) => {
+  try {
+    const user = await User.findOne({ where: { id: id } });
+    if (user) {
+      const newAdmin = await user.update({ userType: "admin" });
+      return newAdmin;
+    }
+    throw new Error("Usuario no encontrado");
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+
+//Quitar permisos de administrador
+const forbidAdminPermissionsController = async (id) => {
+  try {
+    const user = await User.findOne({ where: { id: id } });
+    if (user) {
+      const newUser = await user.update({ userType: "user" });
+      return newUser;
+    }
+    throw new Error("Usuario no encontrado");
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
 module.exports = {
   createUserController,
   deleteUserController,
@@ -212,5 +256,7 @@ module.exports = {
   getUsersByIdController,
   updateUserController,
   sleepUserByIdController,
-  restoreUserByIdController
+  restoreUserByIdController,
+  allowAdminPermissionsController,
+  forbidAdminPermissionsController
 };

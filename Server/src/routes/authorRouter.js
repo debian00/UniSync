@@ -13,7 +13,7 @@ const authorRouter = Router();
 // Traer todos los autores
 authorRouter.get("/", getAllAuthorsHandler);
 // Traer un autor por nombre
-authorRouter.get("/", getAuthorByNameHandler);
+authorRouter.get("/search", getAuthorByNameHandler);
 // Traer un autor por ID
 authorRouter.get("/:id", getAuthorByIdHandler);
 // Crear un nuevo autor
