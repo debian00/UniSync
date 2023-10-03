@@ -3,6 +3,8 @@ const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
 const session = require("express-session");
+const pgSession = require('connect-pg-simple')(session);
+const { Pool } = require('pg')
 const passport = require("passport");
 const router = require('./routes/index')
 
@@ -13,26 +15,27 @@ server.use(morgan('dev'));
 server.use(express.json())
 server.use(cors({}))
 
+const pool = new Pool({
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: 'UniSyncDB',
+  password: process.env.DB_PASSWORD,
+  port: 5432
+});
+
 //session express
-// server.use(
-//   session({
-//     store: new pgSession({
-//       // Insert connect-pg-simple options here
-//       pool: sequelize,
-//       tableName: 'session'
-//     }),
-//     secret: process.env.SESSION_SECRET,
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 days
-//     // Insert express-session options here
-//   })
-// );
 server.use(
   session({
+    store: new pgSession({
+      pool,
+      tableName: 'session',
+      createTableIfMissing: true
+    }),
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 30 * 24 * 60 * 60 * 1000 } // 30 días
+    // Inserta otras opciones de express-session según sea necesario
   })
 );
 
