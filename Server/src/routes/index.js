@@ -9,6 +9,8 @@ const saleRouter = require('./saleRouter');
 const reviewRouter = require('./reviewRouter');
 const promoRouter = require('./promoRouter')
 const stripeRouter = require('./paymentRoutes/stripeRouter')
+const forgotPassRouter = require('./forgotPassRouter');
+const resetPasswordRouter = require('./resetPasswordRouter');
 
 const router = Router()
 
@@ -32,6 +34,9 @@ router.use('/sendmail', promoRouter)
 
 //Rutas de pago
 router.use('/payment', stripeRouter)
+//Rutas de recuperar contraseña
+router.use('/forgot-password', forgotPassRouter)
+router.use('/reset-password', resetPasswordRouter)
 
 
 module.exports = router

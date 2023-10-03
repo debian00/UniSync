@@ -216,19 +216,20 @@ const updateBookController = async (
     if(stock && stock === 0){availability = false}
     if(stock && stock >=1){availability = true}
 
-    const updateBook = await Book.findOne({ where: { id: id } })
-    await updateBook.update(
-      title,
-      author,
-      description,
-      genre,
-      publicationYear,
-      images,
-      sellPrice,
-      pages,
-      stock,
-      availability
-    )
+    const updateBook = await Book.findOne({ where: { id: id } });
+    if (updateBook) {
+      await updateBook.update({
+        title: title,
+        author: author,
+        description: description,
+        genre: genre,
+        publicationYear: publicationYear,
+        images: [images],
+        sellPrice: sellPrice,
+        pages: pages,
+        stock: stock,
+      });
+    }
     return updateBook
   } catch (error) {
     console.log(error)
