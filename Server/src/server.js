@@ -13,7 +13,9 @@ const server = express()
 
 server.use(morgan('dev'));
 server.use(express.json())
-server.use(cors({}))
+server.use(cors({
+  origin:"https://the-next-page.vercel.app"
+}))
 
 //session express
 // server.use(
