@@ -11,7 +11,7 @@ const AuthorModel = require('./models/authors')
 const GenreModel = require('./models/genres')
 
 const sequelize = new Sequelize(
-  `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/UniSyncDB`,
+  `postgresql://postgres:Y6DajEcJ29HL7lPNcHxu@containers-us-west-121.railway.app:6035/railway`,
   { logging: false }
 );
 
