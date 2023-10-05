@@ -34,6 +34,10 @@ module.exports = (sequelize) => {
     deliveryLocation: {
       type: DataTypes.STRING,
     },
+    cartId: {
+      type: DataTypes.UUID, // Referencia al Cart
+      allowNull: false,
+  },
   },
   {
     timestamps: false,
