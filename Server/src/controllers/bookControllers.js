@@ -100,6 +100,7 @@ try {
    order,
    limit: size,
    offset: (page - 1) * size,
+   include: Review
  });
   return books;
 
@@ -114,6 +115,7 @@ const getBookByNameController = async (title) => {
       title: {
         [Op.iLike]: `%${title}%`,
       },
+      include: Review
     }
   })
   return book;
@@ -123,7 +125,8 @@ const getBookByIdController = async (id) => {
   const book = await Book.findOne({
     where: {
       id: id
-    }
+    },
+    include: Review
   })
   return book;
 }
