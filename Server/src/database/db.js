@@ -50,9 +50,9 @@ Review.belongsTo(User);
 User.hasOne(Cart);
 Cart.belongsTo(User);
 
-//Relaciones de sale
-Cart.hasMany(Sale);
-Sale.belongsTo(Cart);
+//Relaciones 
+User.hasMany(Sale);
+Sale.belongsTo(User);
 
 
 module.exports = {

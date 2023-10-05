@@ -13,13 +13,13 @@ module.exports = (sequelize) => {
                 type: DataTypes.UUID, // Referencia al usuario que posee el carrito
                 allowNull: false,
             },
-            items: {
-                type: DataTypes.ARRAY(DataTypes.JSONB), // Un array de objetos JSON que almacena los libros en el carrito
-                defaultValue: [],
+            bookId: {
+                type: DataTypes.UUID,
+                allowNull: false,
             },
-            completedOrders: {
-                type: DataTypes.ARRAY(DataTypes.UUID), // Un array de IDs de pedidos completados
-                defaultValue: [],
+            quantity: {
+                type: DataTypes.INTEGER,
+                defaultValue: 1,
             },
         },
         { timestamps: true }
