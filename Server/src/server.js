@@ -45,9 +45,17 @@ server.use(
 // Configura passport
 server.use(passport.initialize());
 server.use(passport.session());
+// Configura serializeUser y deserializeUser antes de configurar Passport
+passport.serializeUser((user, cb) => {
+  cb(null, user.id);
+});
+passport.deserializeUser((id, cb) => {
+  cb(null, id);
+});
 
 //Enlace a los endpoints
 server.use(router)
+
 
 //Error por si algo falla por aca:
 server.use((err, req, res, next) => {
