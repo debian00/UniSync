@@ -61,7 +61,8 @@ const createReviewController = async ({
         const user= await User.findByPk(userId)
         user.addReview(newReview)
         reviewedBook.addReview(newReview)
-
+        //Linea experimental
+        await newReview.reload()
       //NewReview incluye 2 valores null que son los id de relaciones
       //Por algun motivo en este return figura asi pero si hacemos una
       //peticion get al id de la review, figura correctamente

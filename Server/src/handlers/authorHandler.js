@@ -51,7 +51,7 @@ const updateAuthorHandler = async (req, res) => {
   const { id } = req.params
   const { name } = req.body
   try {
-    const newName = await updateAuthorController({ id, name })
+    const newName = await updateAuthorController(id, { name }); // Cambia el orden de los argumentos
     res.status(200).json(newName)
   } catch (error) {
     console.log(error)

@@ -48,7 +48,7 @@ const getAuthorByIdController = async (id) => {
 
 
 //Modifica el nombre de un autor
-const updateAuthorController = async (id, { name }) => {
+const updateAuthorController = async (id, { name }) => { // Cambia el orden de los argumentos
   const authorToUpdate = await Author.findByPk(id);
   try {
     const updatedAuthor = await authorToUpdate.update({ name });
