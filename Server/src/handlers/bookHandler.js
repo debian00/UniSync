@@ -6,7 +6,9 @@ const {
     updateBookController,
     deleteBookController,
     pauseBookController,
-    restoreBookController
+    restoreBookController,
+    isForSaleController,
+    isNotForSaleController
 } = require("../controllers/bookControllers");
 
 
@@ -141,6 +143,27 @@ const restoreBookHandler = async (req, res) => {
     }
 }
 
+const isForSaleHandler = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const response = await isForSaleController(id);
+        res.status(200).json({ success: true, message: "Oferta lanzada con éxito", response });
+    } catch (error) {
+        res.status(400).json({ success: false, message: 'Problema al ofertar el libro', error: error.message });
+    }
+}
+
+const isNotForSaleHandler = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const response = await isNotForSaleController(id);
+        res.status(200).json({ success: true, message: "Oferta cancelada", response });
+    } catch (error) {
+        res.status(400).json({ success: false, message: 'Problema al retirar la oferta', error: error.message });
+    }
+}
+
+
 module.exports = {
     getAllBooksHandler,
     getBookByIdHandler,
@@ -149,5 +172,7 @@ module.exports = {
     deleteBookHandler,
     pauseBookHandler,
     restoreBookHandler,
-    getBookByNameHandler
+    getBookByNameHandler,
+    isForSaleHandler,
+    isNotForSaleHandler
 }

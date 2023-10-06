@@ -7,8 +7,9 @@ const {
   deleteBookHandler,
   pauseBookHandler,
   restoreBookHandler,
-  getBookByNameHandler
-
+  getBookByNameHandler,
+  isForSaleHandler,
+  isNotForSaleHandler
 } = require("../../handlers/bookHandler");
 
 
@@ -29,6 +30,10 @@ bookRouter.delete("/delete/:id", deleteBookHandler)
 bookRouter.get("/pause/:id", pauseBookHandler)
 
 bookRouter.get("/restore/:id", restoreBookHandler)
+
+bookRouter.get("/forSale/:id", isForSaleHandler)
+
+bookRouter.get("/fullPrice/:id", isNotForSaleHandler)
 
 
 
