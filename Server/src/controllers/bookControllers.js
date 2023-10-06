@@ -231,6 +231,7 @@ const updateBookController = async (
         sellPrice: sellPrice,
         pages: pages,
         stock: stock,
+        availability : availability
       });
     }
     return updateBook
