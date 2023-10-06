@@ -6,7 +6,7 @@ const {
   getAllAuthorsHandler,
   getAuthorByIdHandler,
   updateAuthorHandler
-} = require("../handlers/authorHandler");
+} = require("../../handlers/authorHandler");
 
 const authorRouter = Router();
 

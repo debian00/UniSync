@@ -100,6 +100,7 @@ try {
    order,
    limit: size,
    offset: (page - 1) * size,
+   include: Review
  });
   return books;
 
@@ -114,6 +115,7 @@ const getBookByNameController = async (title) => {
       title: {
         [Op.iLike]: `%${title}%`,
       },
+      include: Review
     }
   })
   return book;
@@ -123,7 +125,8 @@ const getBookByIdController = async (id) => {
   const book = await Book.findOne({
     where: {
       id: id
-    }
+    },
+    include: Review
   })
   return book;
 }
@@ -216,19 +219,21 @@ const updateBookController = async (
     if(stock && stock === 0){availability = false}
     if(stock && stock >=1){availability = true}
 
-    const updateBook = await Book.findOne({ where: { id: id } })
-    await updateBook.update(
-      title,
-      author,
-      description,
-      genre,
-      publicationYear,
-      images,
-      sellPrice,
-      pages,
-      stock,
-      availability
-    )
+    const updateBook = await Book.findOne({ where: { id: id } });
+    if (updateBook) {
+      await updateBook.update({
+        title: title,
+        author: author,
+        description: description,
+        genre: genre,
+        publicationYear: publicationYear,
+        images: [images],
+        sellPrice: sellPrice,
+        pages: pages,
+        stock: stock,
+        availability : availability
+      });
+    }
     return updateBook
   } catch (error) {
     console.log(error)
