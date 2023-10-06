@@ -80,7 +80,8 @@ const createUserHandler = async (req, res) => {
     res.status(201).json(userCreated)
   } catch (error) {
     console.log(error)
-    res.status(422).json("Error al crear usuario")
+    //res.status(422).json("Error al crear usuario")
+    res.status(422).json({error: error.message})
   }
 }
 

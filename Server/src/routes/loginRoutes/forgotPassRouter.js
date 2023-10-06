@@ -1,5 +1,5 @@
 const {Router} = require('express');
-const forgotPassHandler = require('../handlers/forgotPassHandler');
+const forgotPassHandler = require('../../handlers/forgotPassHandler');
 
 const forgotPassRouter = Router();
 

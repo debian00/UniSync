@@ -231,6 +231,7 @@ const updateBookController = async (
         sellPrice: sellPrice,
         pages: pages,
         stock: stock,
+        availability : availability
       });
     }
     return updateBook
@@ -273,6 +274,43 @@ const restoreBookController = async (id) => {
   }
 }
 
+// Controlador para poner un libro en oferta
+const isForSaleController = async (id) => {
+  try {
+    const book = await Book.findOne({ where: { id: id } });
+
+    if (!book) {
+      throw new Error("Libro no encontrado");
+    }
+
+    await book.update({ forSale: true });
+
+    return { success: true, message: "El libro se encuentra ahora en oferta." };
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+// Controlador para retirar un libro de la oferta
+const isNotForSaleController = async (id) => {
+  try {
+    const book = await Book.findOne({ where: { id: id } });
+
+    if (!book) {
+      throw new Error("Libro no encontrado");
+    }
+
+    await book.update({ forSale: false });
+
+    return { success: true, message: "El libro ya no está en oferta." };
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+};
+
+
 module.exports = {
   getAllBooksController,
   getBookByNameController,
@@ -281,5 +319,7 @@ module.exports = {
   updateBookController,
   deleteBookController,
   pauseBookController,
-  restoreBookController
+  restoreBookController,
+  isForSaleController,
+  isNotForSaleController
 }

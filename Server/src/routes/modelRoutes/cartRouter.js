@@ -5,7 +5,7 @@ addItemToCartHandler,
 updateBookQuantityHandler,
 deleteItemFromCartHandler,
 
-} = require("../handlers/cartHandler")
+} = require("../../handlers/cartHandler")
 
 
 const cartRouter = Router();
