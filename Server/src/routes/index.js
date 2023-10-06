@@ -1,17 +1,17 @@
 const { Router } = require('express')
 
 const localLoginRouter = require('./loginRoutes/localLoginRouter')
-const bookRouter = require("./bookRouter");
-const userRouter = require('./userRouter')
-const authorRouter = require('./authorRouter')
-const genreRouter = require('./genreRouter')
-const saleRouter = require('./saleRouter');
-const reviewRouter = require('./reviewRouter');
-const promoRouter = require('./promoRouter')
+const bookRouter = require("./modelRoutes/bookRouter");
+const userRouter = require('./modelRoutes/userRouter')
+const authorRouter = require('./modelRoutes/authorRouter')
+const genreRouter = require('./modelRoutes/genreRouter')
+const saleRouter = require('./modelRoutes/saleRouter');
+const reviewRouter = require('./modelRoutes/reviewRouter');
+const promoRouter = require('./paymentRoutes/promoRouter')
 const stripeRouter = require('./paymentRoutes/stripeRouter')
-const forgotPassRouter = require('./forgotPassRouter');
-const resetPasswordRouter = require('./resetPasswordRouter');
-const cartRouter = require ("./cartRouter")
+const forgotPassRouter = require('./loginRoutes/forgotPassRouter');
+const resetPasswordRouter = require('./loginRoutes/resetPasswordRouter');
+const cartRouter = require ("./modelRoutes/cartRouter")
 const router = Router()
 
 

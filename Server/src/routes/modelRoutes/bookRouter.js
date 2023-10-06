@@ -9,7 +9,7 @@ const {
   restoreBookHandler,
   getBookByNameHandler
 
-} = require("../handlers/bookHandler");
+} = require("../../handlers/bookHandler");
 
 
 const bookRouter = Router();
