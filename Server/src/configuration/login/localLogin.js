@@ -16,6 +16,9 @@ const localLogin = async (req, res) => {
     if (isPasswordValid) {
       const tokenSession = await loginToken(user);
       res.status(200).json({ success: true, data: user, token: tokenSession });
+
+      req.session.user = user
+      
     } else {
       res.status(401).json({ success: false, msg: 'Contraseña incorrecta' });
     }
