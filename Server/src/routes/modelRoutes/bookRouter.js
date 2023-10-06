@@ -31,9 +31,9 @@ bookRouter.get("/pause/:id", pauseBookHandler)
 
 bookRouter.get("/restore/:id", restoreBookHandler)
 
-bookRouter.get("/forSale/:id", isForSaleHandler)
+bookRouter.patch("/forSale/:id", isForSaleHandler)
 
-bookRouter.get("/fullPrice/:id", isNotForSaleHandler)
+bookRouter.patch("/fullPrice/:id", isNotForSaleHandler)
 
 
 
