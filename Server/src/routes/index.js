@@ -9,6 +9,7 @@ const saleRouter = require('./modelRoutes/saleRouter');
 const reviewRouter = require('./modelRoutes/reviewRouter');
 const promoRouter = require('./paymentRoutes/promoRouter')
 const stripeRouter = require('./paymentRoutes/stripeRouter')
+const mercadoPagoRouter = require('./paymentRoutes/mercadoPagoRouter')
 const forgotPassRouter = require('./loginRoutes/forgotPassRouter');
 const resetPasswordRouter = require('./loginRoutes/resetPasswordRouter');
 const cartRouter = require ("./modelRoutes/cartRouter")
@@ -35,7 +36,8 @@ router.use('/sendmail', promoRouter)
 router.use('/cart', cartRouter)
 
 //Rutas de pago
-router.use('/payment', stripeRouter)
+router.use('/pay/stripe', stripeRouter)
+router.use('/pay/mercadoPago', mercadoPagoRouter)
 //Rutas de recuperar contraseña
 router.use('/forgot-password', forgotPassRouter)
 router.use('/reset-password', resetPasswordRouter)
