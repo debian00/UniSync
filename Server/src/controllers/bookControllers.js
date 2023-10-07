@@ -20,6 +20,7 @@ const getAllBooksController = async (req) => {
     stockMin,
     stockMax,
     availability,
+    forSale
   } = req.query;
   
   //Logica para la pagina y numero de items
@@ -54,6 +55,8 @@ const getAllBooksController = async (req) => {
    stockDesc: ["stock", "DESC"],
    createdAtAsc: ["createdAt","ASC"],
    createdAtDesc: ["createdAt", "DESC"],
+   forSaleAsc:['forSale','ASC'],
+   forSaleDesc:['forSale','DESC'],
   };
 
 try {
@@ -93,6 +96,7 @@ try {
   if (stockMax && !Number.isNaN(stockMax)) {filter.stock = { ...filter.stock, [Op.lte]: stockMax };}
   
   if (availability) {filter.availability = availability === 'true';}
+  if (forSale) {filter.forSale = forSale === 'true';}
 
 
  const books = await Book.findAndCountAll({
