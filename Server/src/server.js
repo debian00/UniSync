@@ -20,7 +20,7 @@ server.use(cors({
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
-  database: 'UniSyncDB',
+  database: 'railway',
   password: process.env.DB_PASSWORD,
   port: 5432
 });
