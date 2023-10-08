@@ -4,7 +4,7 @@ const nodemailer = require('nodemailer');
 const path = require('path');
 const fs = require('fs'); // Asegúrate de requerir fs
 const { log } = require('console');
-const templatePath = path.join(__dirname, 'mailingTemplates', 'RecuperarContrasea', 'index.html');
+const templatePath = path.join(__dirname, '../configuration/mailingTemplates', 'RecuperarContrasea', 'index.html');
 
 const forgotPassHandler = async (req, res) => {
     const { email } = req.body;

@@ -92,6 +92,9 @@ const createUserController = async ({
   password
 }) => {
   try {
+    //todo: modif temporal
+    const existentEmail = await User.findOne({where:{email}})
+if(existentEmail){throw new Error(`Ya existe un usuario con el correo ${email}`)}
     const [createdUser, created] = await User.findOrCreate({
       where: { userName },
       defaults: {
@@ -105,6 +108,7 @@ const createUserController = async ({
     });
 
     if (!created) {
+      console.log()
       throw new Error(`El nombre de usuario ${userName} ya existe.`);
     }
 

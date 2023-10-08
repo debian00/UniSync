@@ -11,6 +11,7 @@ const getUserCartHandler = async (req,res) => {
 const { userId } = req.params
 try {
   const userCart = await getUserCartController(userId)
+  req.session.cart = userCart
   res.status(200).json(userCart)
 } catch (error) {
   console.log(error)
