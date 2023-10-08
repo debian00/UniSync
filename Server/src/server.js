@@ -14,8 +14,7 @@ const server = express()
 server.use(morgan('dev'));
 server.use(express.json())
 server.use(cors({
-  origin:"https://the-next-page.vercel.app",
-  credentials: true,
+  origin:"https://the-next-page.vercel.app"
 }))
 
 const pool = new Pool({
