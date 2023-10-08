@@ -8,7 +8,7 @@ const getUserCartController = async (userId) => {
     const userCart = await Cart.findAll({ where: { userId } })
     const bookFinal = []
     userCart.map(async (item) => {
-      let book = await Book.findOne({ where: { bookId: item.bookId } })
+      let book = await Book.findOne({ where: { id: item.bookId } })
         bookFinal.push({
           ...book, ...item.quantity
         })
