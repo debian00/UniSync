@@ -2,12 +2,10 @@ const { Cart, Book } = require("../database/db");
 const { Op } = require("sequelize");
 
 
-const getUserCartController = async (userId, req) => {
+const getUserCartController = async (userId) => {
   try {
 
     const userCart = await Cart.findAll({ where: { userId } });
-
-    req.session.cart = userCart
 
     const bookFinal = [];
 
