@@ -1,7 +1,7 @@
 const nodemailer = require("nodemailer");
 const path = require('path');
 const fs = require('fs'); // Asegúrate de requerir fs
-const templatePath = path.join(__dirname, 'mailingTemplates', 'Promociones', 'index.html');
+const templatePath = path.join(__dirname, '../configuration/mailingTemplates', 'Promociones', 'index.html');
 
 const sendMail = (req, res) => {
     try {

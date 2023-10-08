@@ -10,7 +10,7 @@ const {
   sleepUserByIdHandler,
   allowAdminPermissionsHandler,
   forbidAdminPermissionsHandler
-} = require("../handlers/userHandlers");
+} = require("../../handlers/userHandlers");
 
 const userRouter = Router();
 

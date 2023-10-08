@@ -6,7 +6,7 @@ const {
     updateSaleHandler,
     deleteSaleHandler
 
-} = require("../handlers/saleHandler");
+} = require("../../handlers/saleHandler");
 
 const saleRouter = Router();
 

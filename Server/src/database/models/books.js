@@ -48,6 +48,10 @@ module.exports = (sequelize) => {
             availability: {
                 type: DataTypes.BOOLEAN,
                 defaultValue: true,
+            },
+            forSale: {
+                type: DataTypes.BOOLEAN,
+                defaultValue:false
             }
 
         },

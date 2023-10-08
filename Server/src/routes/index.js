@@ -1,15 +1,18 @@
 const { Router } = require('express')
 
 const localLoginRouter = require('./loginRoutes/localLoginRouter')
-const bookRouter = require("./bookRouter");
-const userRouter = require('./userRouter')
-const authorRouter = require('./authorRouter')
-const genreRouter = require('./genreRouter')
-const saleRouter = require('./saleRouter');
-const reviewRouter = require('./reviewRouter');
-const promoRouter = require('./promoRouter')
+const bookRouter = require("./modelRoutes/bookRouter");
+const userRouter = require('./modelRoutes/userRouter')
+const authorRouter = require('./modelRoutes/authorRouter')
+const genreRouter = require('./modelRoutes/genreRouter')
+const saleRouter = require('./modelRoutes/saleRouter');
+const reviewRouter = require('./modelRoutes/reviewRouter');
+const promoRouter = require('./paymentRoutes/promoRouter')
 const stripeRouter = require('./paymentRoutes/stripeRouter')
-
+const mercadoPagoRouter = require('./paymentRoutes/mercadoPagoRouter')
+const forgotPassRouter = require('./loginRoutes/forgotPassRouter');
+const resetPasswordRouter = require('./loginRoutes/resetPasswordRouter');
+const cartRouter = require ("./modelRoutes/cartRouter")
 const router = Router()
 
 
@@ -29,9 +32,15 @@ router.use('/sale', saleRouter)
 router.use('/review',reviewRouter)
 //Ruta enviar promocion
 router.use('/sendmail', promoRouter)
+//Ruta de cart
+router.use('/cart', cartRouter)
 
 //Rutas de pago
-router.use('/payment', stripeRouter)
+router.use('/pay/stripe', stripeRouter)
+router.use('/pay/mercadoPago', mercadoPagoRouter)
+//Rutas de recuperar contraseña
+router.use('/forgot-password', forgotPassRouter)
+router.use('/reset-password', resetPasswordRouter)
 
 
 module.exports = router

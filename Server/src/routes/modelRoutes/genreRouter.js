@@ -5,7 +5,7 @@ const {
   getGenreByNameHandler,
   getAllGenresHandler,
   getGenreByIdHandler,
-} = require('../handlers/genreHandler')
+} = require('../../handlers/genreHandler')
 
 const genreRouter = Router();
 

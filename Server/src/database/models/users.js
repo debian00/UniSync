@@ -45,6 +45,9 @@ module.exports = (sequelize) => {
       type: DataTypes.BOOLEAN,
       defaultValue: false,
     },
+    gitHubId:{
+      type:DataTypes.STRING
+    }
   },
     {
       timestamps: false,

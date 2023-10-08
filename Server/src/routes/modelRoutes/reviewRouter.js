@@ -6,7 +6,7 @@ const {
     updateReviewHandler,
     deleteReviewHandler,
     bookReviewHandler
-} = require("../handlers/reviewHandler");
+} = require("../../handlers/reviewHandler");
 
 const reviewRouter = Router();
 
