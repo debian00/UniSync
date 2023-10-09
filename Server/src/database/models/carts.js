@@ -21,6 +21,9 @@ module.exports = (sequelize) => {
                 type: DataTypes.INTEGER,
                 defaultValue: 1,
             },
+            price: {
+              type: DataTypes.INTEGER
+            }
         },
         { timestamps: true,
             hooks: {
