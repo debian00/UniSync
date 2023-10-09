@@ -2,7 +2,8 @@ const {
   getUserCartController,
   addItemToCartController,
   updateBookQuantityController,
-  deleteItemFromCartController
+  deleteItemFromCartController,
+  emptyCartController
 } = require ("../controllers/cartController")
 
 
@@ -58,10 +59,21 @@ try {
 }
 }
 
+const emptyCartHandler = async (req, res) => {
+  const {userId} = req.params
+  try {
+    const response = emptyCartController(userId)
+    res.status(204).json({success: true, message: "El carrito se vacio con exito", response})
+  } catch (error) {
+    res.status(400).json('Error al borrar items del carrito')
+  }
+}
+
 
 module.exports= {
 getUserCartHandler,
 addItemToCartHandler,
 updateBookQuantityHandler,
 deleteItemFromCartHandler,
+emptyCartHandler
 }

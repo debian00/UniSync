@@ -64,12 +64,24 @@ const deleteItemFromCartController = async (userId, bookId) => {
   }
 }
 
+const emptyCartController = async (userId) => {
+  try {
+    await Cart.destroy({ where: { userId } });
 
+    const userCart = await Cart.create({ userId });
+
+    return userCart;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
 
 
 module.exports = {
   getUserCartController,
   addItemToCartController,
   updateBookQuantityController,
-  deleteItemFromCartController
+  deleteItemFromCartController,
+  emptyCartController
 }

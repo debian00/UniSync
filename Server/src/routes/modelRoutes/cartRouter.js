@@ -4,7 +4,7 @@ getUserCartHandler,
 addItemToCartHandler,
 updateBookQuantityHandler,
 deleteItemFromCartHandler,
-
+emptyCartHandler
 } = require("../../handlers/cartHandler")
 
 
@@ -18,5 +18,7 @@ cartRouter.post("/add/:userId",addItemToCartHandler)
 cartRouter.patch("/update/:userId", updateBookQuantityHandler)
 //Elimina del carrito del UserID el libro BookId
 cartRouter.delete("/delete/:userId/:bookId", deleteItemFromCartHandler)
+//Elimina todo el carrito
+cartRouter.delete("/deleteAll/:userId", emptyCartHandler)
 
 module.exports= cartRouter
