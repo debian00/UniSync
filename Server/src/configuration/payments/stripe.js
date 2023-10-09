@@ -4,35 +4,34 @@ const Stripe = require("stripe");
 const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY);
 
 const createSession = async (req, res) => {
-
-  const { name, description, author, price } = req.body;
-
   try {
-    const session = await stripe.checkout.sessions.create({
-      line_items: [
-        {
-          price_data: {
-            product_data: {
-              name: name,
-              description: description,
-              metadata: {
-                author: author
-              }
-            },
-            currency: "usd",
-            unit_amount: price * 100,
-          },
-          quantity: 1,
+ 
+    const { title, author, price, quantity } = req.body;
+
+  
+    const lineItem = {
+      price_data: {
+        product_data: {
+          name: title,        
+          description: `Autor: ${author}`,
         },
-      ],
+        currency: "usd",
+        unit_amount: price * 100,
+      },
+      quantity: quantity,
+    };
+
+    const session = await stripe.checkout.sessions.create({
+      line_items: [lineItem],
       mode: "payment",
-      success_url: `http://localhost:3001/pay/success/`,
-      cancel_url: "http://localhost:3001/pay/cancel",
+      success_url: "http://localhost:3001/success",
+      cancel_url: "http://localhost:3001/cancel",
     });
-    console.log(session.url);
-    return session.url;
+
+    console.log(session);
+    return res.json({ url: session.url });
   } catch (error) {
-    console.log(error.message);
+    return res.status(500).json({ message: error.message });
   }
 };
 

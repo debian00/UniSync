@@ -3,14 +3,10 @@ const { createSession } = require("../../configuration/payments/stripe");
 
 const stripeRouter = Router();
 
+stripeRouter.post("/create-checkout-session", createSession);
 
-stripeRouter.post("/stripe", createSession);
+stripeRouter.get("/success", (req, res) => res.redirect("/success.html"));
 
-stripeRouter.get("/success", (req, res) => {
-  res.json("Pago realizado con exito");
-});
+stripeRouter.get("/cancel", (req, res) => res.redirect("/cancel.html"));
 
-stripeRouter.get("/cancel", (req, res) => {
-  res.json("Pago cancelado");
-});
-module.exports =  stripeRouter;
+module.exports = stripeRouter;
