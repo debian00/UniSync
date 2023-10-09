@@ -4,19 +4,29 @@ const { Op } = require("sequelize");
 
 const getUserCartController = async (userId) => {
   try {
+    const userCart = await Cart.findAll({
+      where: { userId },
+    });
 
-    const userCart = await Cart.findAll({ where: { userId } });
+    const bookIds = userCart.map((cartItem) => cartItem.bookId);
 
-    const bookFinal = [];
+    const booksInCart = await Book.findAll({
+      where: {
+        id: {
+          [Op.in]: bookIds,
+        },
+      },
+    });
 
-    for (const item of userCart) {
-      const book = await Book.findOne({ where: { id: item.bookId } });
-      if (book) {
-        bookFinal.push({ ...book.dataValues, quantity: item.quantity });
-      }
-    }
+    const cartWithBooks = userCart.map((cartItem) => {
+      const bookData = booksInCart.find((book) => book.id === cartItem.bookId);
+      return {
+        ...cartItem.dataValues,
+        book: bookData,
+      };
+    });
 
-    return bookFinal;
+    return cartWithBooks;
   } catch (error) {
     console.log(error);
     throw error;
