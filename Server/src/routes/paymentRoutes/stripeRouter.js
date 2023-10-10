@@ -5,8 +5,12 @@ const stripeRouter = Router();
 
 stripeRouter.post("/create-checkout-session", createSession);
 
-stripeRouter.get("/success", (req, res) => res.redirect("/success.html"));
+stripeRouter.get("/success", (req, res) =>
+  res.redirect("http://localhost:5173/success")
+);
 
-stripeRouter.get("/cancel", (req, res) => res.redirect("/cancel.html"));
+stripeRouter.get("/cancel", (req, res) =>
+  res.redirect("http://localhost:5173/canceled")
+);
 
 module.exports = stripeRouter;
