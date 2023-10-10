@@ -78,9 +78,7 @@ const emptyCartController = async (userId) => {
   try {
     await Cart.destroy({ where: { userId } });
 
-    const userCart = await Cart.create({ userId });
-
-    return userCart;
+    return "Se ha vaciado el carrito del usuario.";
   } catch (error) {
     console.log(error);
     throw error;
