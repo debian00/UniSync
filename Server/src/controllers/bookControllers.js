@@ -230,10 +230,10 @@ if(typeof author == "number"){
     stock,
     availability
   })
-  // for (let i = 0; i < genre.length; i++) {
-  //   await newBook.addGenre(genre[i])
-  // }
-  await newBook.setGenre(genreId)
+  for (let i = 0; i < genre.length; i++) {
+    await newBook.addGenre(genre[i])
+  }
+  // await newBook.setGenre(genreId)
   await newBook.setAuthor(authorId)
   
   //Las relaciones de autor no figuran en la tabla intermedia pero setea el userId del book
