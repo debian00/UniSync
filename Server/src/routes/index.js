@@ -12,7 +12,8 @@ const stripeRouter = require('./paymentRoutes/stripeRouter')
 const mercadoPagoRouter = require('./paymentRoutes/mercadoPagoRouter')
 const forgotPassRouter = require('./loginRoutes/forgotPassRouter');
 const resetPasswordRouter = require('./loginRoutes/resetPasswordRouter');
-const cartRouter = require ("./modelRoutes/cartRouter")
+const cartRouter = require("./modelRoutes/cartRouter")
+const favoriteRouter = require('./favoriteRoutes/favoriteRouter');
 const router = Router()
 
 
@@ -41,6 +42,8 @@ router.use('/pay/mercadoPago', mercadoPagoRouter)
 //Rutas de recuperar contraseña
 router.use('/forgot-password', forgotPassRouter)
 router.use('/reset-password', resetPasswordRouter)
+//Rutas de favorites
+router.use("/favorites", favoriteRouter);
 
 
 module.exports = router

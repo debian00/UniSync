@@ -47,7 +47,11 @@ module.exports = (sequelize) => {
     },
     gitHubId:{
       type:DataTypes.STRING
-    }
+    },
+    favorites: {
+      type: DataTypes.ARRAY(DataTypes.TEXT),
+      allowNull: true,
+    },
   },
     {
       timestamps: false,
