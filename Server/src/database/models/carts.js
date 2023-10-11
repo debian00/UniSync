@@ -21,7 +21,24 @@ module.exports = (sequelize) => {
                 type: DataTypes.INTEGER,
                 defaultValue: 1,
             },
+            price: {
+              type: DataTypes.INTEGER
+            }
         },
-        { timestamps: true }
+        { timestamps: true,
+            hooks: {
+                beforeCreate: async (cartItem) => {
+                  const book = await sequelize.models.Book.findByPk(cartItem.bookId);
+                  if (book) {
+                    cartItem.price = book.sellPrice;
+                  }
+                },
+                beforeUpdate: async (cartItem) => {
+                  const book = await sequelize.models.Book.findByPk(cartItem.bookId);
+                  if (book) {
+                    cartItem.price = book.sellPrice * cartItem.quantity;
+                  }
+                },
+              }, }
     );
 };

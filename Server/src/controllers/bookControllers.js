@@ -76,7 +76,7 @@ try {
     }
     else {
       genreIds = genre.split(',').map(Number);
-      filter.genre = {[Op.contains]: [genreIds]};
+      filter.genre = {[Op.contains]: genreIds};
     }
   }
   
@@ -147,13 +147,14 @@ const createBookController = async (
   stock,
   availability
 ) => {
+  //! Creacion de autor si no existe
 // Id que voy a pasarle a la relacion
  let authorId = null
-
-// Los siguientes condicionales de typeof son para evitar problemas de comunicacion con el front.
-// En caso de que envien el id o el string, en caso de que envien el string del input, no pasa nada.
-const authorsInDb = await Author.findAll()
-let createInDbId= authorsInDb.length+1
+ // Los siguientes condicionales de typeof son para evitar problemas de comunicacion con el front.
+ // En caso de que envien el id o el string, en caso de que envien el string del input, no pasa nada.
+ const authorsInDb = await Author.findAll()
+ let createdAuthorsInDbId= authorsInDb.length+1
+ 
  // Si recibo un autor desde el front como string
  if(typeof author == "string"){
       // Si recibo un libro sin autor, busco en DB un autor "Unknown" y asigno su id para la relacion 
@@ -163,7 +164,7 @@ let createInDbId= authorsInDb.length+1
       // Si no existe el "unknown" en la DB, lo creo y asigno su id para la relacion
       // Esta funcion se ejecuta una unica vez hasta que se haga un force en la DB
         if(!existentAuthor){
-          let newDBAuthor = await Author.create({id:createInDbId, name:"Unknown"})
+          let newDBAuthor = await Author.create({id:createdAuthorsInDbId, name:"Unknown"})
           if(newDBAuthor) {authorId=newDBAuthor.dataValues.id}
         }}
       
@@ -171,7 +172,7 @@ let createInDbId= authorsInDb.length+1
        if(author){const existentAuthor = await Author.findOne({where:{name:author}})
         if(existentAuthor){authorId=existentAuthor.dataValues.id}
         if(!existentAuthor){
-          let newDBAuthor = await Author.create({id:createInDbId, name:author})
+          let newDBAuthor = await Author.create({id:createdAuthorsInDbId, name:author})
          if(newDBAuthor) {authorId=newDBAuthor.dataValues.id}
         }}}
 
@@ -184,6 +185,39 @@ if(typeof author == "number"){
       }
 }
     
+//! Creacion de genero si no existe 
+let genreId = null
+const genresInDb = await Genre.findAll()
+let createdGenresInDbId= genresInDb.length+1
+ // Si recibo un genre desde el front como string
+ if(typeof genre == "string"){
+  // Si recibo un libro sin genre, busco en DB un genre "Unknown" y asigno su id para la relacion 
+   if(!genre){
+    const existentGenre = await Genre.findOne({where:{name:"Unknown"}})
+    if(existentGenre){genreId=existentGenre.dataValues.id}
+  // Si no existe el "unknown" en la DB, lo creo y asigno su id para la relacion
+  // Esta funcion se ejecuta una unica vez hasta que se haga un force en la DB
+    if(!existentGenre){
+      let newDBGenre = await Genre.create({id:createdGenresInDbId, name:"Unknown"})
+      if(newDBGenre) {genreId=newDBGenre.dataValues.id}
+    }}
+  
+  //Busco el genre y si no existe, lo creo
+   if(genre){const existentGenre = await Genre.findOne({where:{name:genre}})
+    if(existentGenre){genreId=existentGenre.dataValues.id}
+    if(!existentGenre){
+      let newDBGenre = await Genre.create({id:createdGenresInDbId, name:genre})
+     if(newDBGenre) {genreId=newDBGenre.dataValues.id}
+    }}}
+
+  // Si recibo el autor como numero desde el front ejecuto esto
+if(typeof author == "number"){
+  const existentAuthor = await Author.findOne({where:{id:author}})
+  if (existentAuthor){
+    authorId=existentAuthor.dataValues.id
+    author=existentAuthor.dataValues.name
+  }
+}
   const newBook = await Book.create({
     title,
     author,
@@ -199,7 +233,9 @@ if(typeof author == "number"){
   for (let i = 0; i < genre.length; i++) {
     await newBook.addGenre(genre[i])
   }
+  // await newBook.setGenre(genreId)
   await newBook.setAuthor(authorId)
+  
   //Las relaciones de autor no figuran en la tabla intermedia pero setea el userId del book
   return newBook
 }
