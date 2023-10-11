@@ -76,7 +76,7 @@ try {
     }
     else {
       genreIds = genre.split(',').map(Number);
-      filter.genre = {[Op.contains]: [genreIds]};
+      filter.genre = {[Op.contains]: genreIds};
     }
   }
   
