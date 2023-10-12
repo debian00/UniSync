@@ -14,6 +14,7 @@ const forgotPassRouter = require('./loginRoutes/forgotPassRouter');
 const resetPasswordRouter = require('./loginRoutes/resetPasswordRouter');
 const cartRouter = require("./modelRoutes/cartRouter")
 const favoriteRouter = require('./favoriteRoutes/favoriteRouter');
+const invoiceRouter = require("./paymentRoutes/invoiceRouter")
 const router = Router()
 
 
@@ -39,6 +40,7 @@ router.use('/cart', cartRouter)
 //Rutas de pago
 router.use('/pay/stripe', stripeRouter)
 router.use('/pay/mercadoPago', mercadoPagoRouter)
+router.use("/invoice", invoiceRouter)
 //Rutas de recuperar contraseña
 router.use('/forgot-password', forgotPassRouter)
 router.use('/reset-password', resetPasswordRouter)
