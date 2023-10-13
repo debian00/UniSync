@@ -1,17 +1,17 @@
-const { User } = require('../database/models/users');
-const { Book } = require('../database/models/books');
+const { Book, User} = require("../database/db");
 
- const userAddFavorite = async (userId, bookId) => {
+ const userAddFavoriteController = async (userId, bookId) => {
     try {
         const user = await User.findByPk(userId);
         if(!user){ throw new Error ("Usuario no encontrado")}
-        const asset = await Book.findByPk(bookId);
-        if(!asset){ throw new Error ("Libro no encontrada")}
-    
+        const book = await Book.findByPk(bookId);
+        if(!book){ throw new Error ("Libro no encontrada")}
+        if(user.favorites.includes(bookId)){
+            throw new Error ("El libro ya esta entre los favoritos del usuario")
+        }
         const newFavorite = [...user.favorites];
-        newFavorite.push(bookId);
-    
-        await User.update({favorites : newFavorite})
+        newFavorite.push(book.id)
+        await user.update({ favorites: newFavorite });
         return "Updated succesfuly"
     } catch (error) {
         console.log(error);
@@ -19,16 +19,16 @@ const { Book } = require('../database/models/books');
     }
 }
 
-const userRemoveFavorite = async (userId, bookId) => {
+const userRemoveFavoriteController = async (userId, bookId) => {
     try {
         const user = await User.findByPk(userId);
         if (!user) {
             throw new Error("Usuario no encontrado");
         }
-
+       
         const favoriteIndex = user.favorites.indexOf(bookId);
         if (favoriteIndex === -1) {
-            return "El libro no está en la lista de favoritos del usuario.";
+            throw new Error("El libro no está en la lista de favoritos del usuario.");
         }
 
         const newFavorites = [...user.favorites];
@@ -43,10 +43,14 @@ const userRemoveFavorite = async (userId, bookId) => {
 };
 
 
-const userAllFavorites = async (userId) => {
+const userAllFavoritesController = async (id) => {
     try {
-        const {user} = User.findByPk(userId)
+        const user = await User.findByPk(id)
         if(!user){ throw new Error("Usuario no encontrado") }
+
+        // const favs = await Book.findAll({where:{id:user.favorites}})
+        // return favs
+        
         return user.favorites
     } catch (error) {
         console.log(error);
@@ -55,7 +59,7 @@ const userAllFavorites = async (userId) => {
 }
 
 module.exports = {
-    userAddFavorite,
-    userRemoveFavorite,
-    userAllFavorites
+    userAddFavoriteController,
+    userRemoveFavoriteController,
+    userAllFavoritesController
 }
