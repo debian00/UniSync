@@ -22,15 +22,18 @@ const createSession = async (req, res) => {
       };
     });
 
+    const params = new URLSearchParams();
+    params.append("items", JSON.stringify(items));
+
     const session = await stripe.checkout.sessions.create({
       line_items: lineItem,
       mode: "payment",
-      success_url: "http://localhost:3001/pay/stripe/success",
+      success_url: `http://localhost:3001/pay/stripe/success`,
       cancel_url: "http://localhost:3001/pay/stripe/cancel",
     });
 
     console.log(session);
-    return res.json({ url: session.url });
+    return res.json(session);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
