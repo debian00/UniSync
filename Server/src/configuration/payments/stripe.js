@@ -5,31 +5,35 @@ const stripe = new Stripe(process.env.STRIPE_PRIVATE_KEY);
 
 const createSession = async (req, res) => {
   try {
- 
-    const { title, author, price, quantity } = req.body;
+    const { items } = req.body;
 
-  
-    const lineItem = {
-      price_data: {
-        product_data: {
-          name: title,        
-          description: `Autor: ${author}`,
+    //? Multiple compras
+    const lineItem = items.map((ele) => {
+      return {
+        price_data: {
+          product_data: {
+            name: ele.book.title,
+            description: `Author: ${ele.book.author}`,
+          },
+          currency: "usd",
+          unit_amount: ele.price,
         },
-        currency: "usd",
-        unit_amount: price * 100,
-      },
-      quantity: quantity,
-    };
+        quantity: ele.quantity,
+      };
+    });
+
+    const params = new URLSearchParams();
+    params.append("items", JSON.stringify(items));
 
     const session = await stripe.checkout.sessions.create({
-      line_items: [lineItem],
+      line_items: lineItem,
       mode: "payment",
-      success_url: "http://localhost:3001/success",
-      cancel_url: "http://localhost:3001/cancel",
+      success_url: `http://localhost:3001/pay/stripe/success`,
+      cancel_url: "http://localhost:3001/pay/stripe/cancel",
     });
 
     console.log(session);
-    return res.json({ url: session.url });
+    return res.json(session);
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
