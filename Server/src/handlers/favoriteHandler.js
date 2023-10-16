@@ -1,13 +1,13 @@
 const {
-    userAddFavorite,
-    userRemoveFavorite,
-    userAllFavorites
+    userAddFavoriteController,
+    userRemoveFavoriteController,
+    userAllFavoritesController
 } = require("../controllers/favoriteController");
 
 const updateFavoriteHandler = async (req, res) => {
     const { userId, bookId } = req.body;
     try {
-        await userAddFavorite(userId,bookId);
+        await userAddFavoriteController(userId,bookId);
         res.status(200).json("El libro se agregó a favoritos.")
     } catch (error) {
         console.log(error)
@@ -18,7 +18,7 @@ const updateFavoriteHandler = async (req, res) => {
 const removeFavoriteHandler = async (req, res) => {
     const { userId, bookId } = req.body;
     try {
-        await userRemoveFavorite(userId,bookId);
+        await userRemoveFavoriteController(userId,bookId);
         res.status(200).json("El libro se eliminó de favoritos.")
     } catch (error) {
         console.log(error)
@@ -27,9 +27,10 @@ const removeFavoriteHandler = async (req, res) => {
 }
 
 const getAllFavoriteHandler = async (req, res) => {
-    const {userId} = req.params
+    const {id} = req.params
     try {
-        const response = await userAllFavorites(userId);
+        console.log(id)
+        const response = await userAllFavoritesController(id);
         res.status(200).json(response)
     } catch (error) {
         console.log(error)

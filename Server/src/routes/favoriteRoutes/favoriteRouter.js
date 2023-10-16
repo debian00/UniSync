@@ -10,7 +10,7 @@ const favoriteRouter = Router();
 
 favoriteRouter.put("/like", updateFavoriteHandler);
 favoriteRouter.put("/unlike", removeFavoriteHandler);
-favoriteRouter.get("/", getAllFavoriteHandler);
+favoriteRouter.get("/:id", getAllFavoriteHandler);
 
 
 module.exports = favoriteRouter;
