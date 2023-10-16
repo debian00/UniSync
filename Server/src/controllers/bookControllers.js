@@ -1,5 +1,6 @@
+const { Console } = require("console");
 const { Book, Author, Genre, Review } = require("../database/db");
-const { Op } = require("sequelize");
+const { Op, INTEGER } = require("sequelize");
 
 const getAllBooksController = async (req) => {
 
@@ -76,7 +77,7 @@ try {
     }
     else {
       genreIds = genre.split(',').map(Number);
-      filter.genre = {[Op.contains]: [genreIds]};
+      filter.genre = {[Op.contains]: genreIds};
     }
   }
   
@@ -147,31 +148,42 @@ const createBookController = async (
   stock,
   availability
 ) => {
+  try {
+ 
+  //! Creacion de autor si no existe
 // Id que voy a pasarle a la relacion
  let authorId = null
+ // Los siguientes condicionales de typeof son para evitar problemas de comunicacion con el front.
+ // En caso de que envien el id o el string, en caso de que envien el string del input, no pasa nada.
+ const authorsInDb = await Author.findAll()
+ let createdAuthorsInDbId= authorsInDb.length+1
 
-// Los siguientes condicionales de typeof son para evitar problemas de comunicacion con el front.
-// En caso de que envien el id o el string, en caso de que envien el string del input, no pasa nada.
-const authorsInDb = await Author.findAll()
-let createInDbId= authorsInDb.length+1
  // Si recibo un autor desde el front como string
  if(typeof author == "string"){
       // Si recibo un libro sin autor, busco en DB un autor "Unknown" y asigno su id para la relacion 
-       if(!author){
+       if(!author || author.length===1){
+        
         const existentAuthor = await Author.findOne({where:{name:"Unknown"}})
-        if(existentAuthor){authorId=existentAuthor.dataValues.id}
+        if(existentAuthor){
+          authorId=existentAuthor.dataValues.id
+          author=existentAuthor.dataValues.name
+        }
       // Si no existe el "unknown" en la DB, lo creo y asigno su id para la relacion
       // Esta funcion se ejecuta una unica vez hasta que se haga un force en la DB
         if(!existentAuthor){
-          let newDBAuthor = await Author.create({id:createInDbId, name:"Unknown"})
-          if(newDBAuthor) {authorId=newDBAuthor.dataValues.id}
+          let newDBAuthor = await Author.create({id:createdAuthorsInDbId, name:"Unknown"})
+          if(newDBAuthor) {
+            authorId=newDBAuthor.dataValues.id
+            author=newDBAuthor.dataValues.name
+          }
         }}
       
       //Busco el autor y si no existe, lo creo
-       if(author){const existentAuthor = await Author.findOne({where:{name:author}})
+       if(author && author.length > 1){        
+        const existentAuthor = await Author.findOne({where:{name:author}})
         if(existentAuthor){authorId=existentAuthor.dataValues.id}
         if(!existentAuthor){
-          let newDBAuthor = await Author.create({id:createInDbId, name:author})
+          let newDBAuthor = await Author.create({id:createdAuthorsInDbId, name:author})
          if(newDBAuthor) {authorId=newDBAuthor.dataValues.id}
         }}}
 
@@ -184,6 +196,63 @@ if(typeof author == "number"){
       }
 }
     
+//! Creacion de genero si no existe 
+let genreId = []
+const genresInDb = await Genre.findAll()
+let createdGenresInDbId= genresInDb.length+1 
+// Si recibo un libro sin genre, busco en DB un genre "Unknown" y asigno su id para la relacion 
+if(genre.length === 0){
+  const existentGenre = await Genre.findOne({where:{name:"Unknown"}})
+  if(existentGenre){genreId.push(existentGenre.dataValues.id)}
+  // Si no existe el "unknown" en la DB, lo creo y asigno su id para la relacion
+  // Esta funcion se ejecuta una unica vez hasta que se haga un force en la DB
+    if(!existentGenre){
+      let newDBGenre = await Genre.create({id:createdGenresInDbId, name:"Unknown"})
+      if(newDBGenre) {genreId.push(newDBGenre.dataValues.id)}
+    }}
+
+// Si recibo un genero que contenga strings, 
+if(genre){
+
+  // const genres = genre.split(",")
+  const numbers = genre.filter(item => typeof item === "number")
+  const words = genre.filter(item => typeof item === "string")
+  if(numbers.length>0){
+    const existentGenre = await Genre.findAll({where:{id:{[Op.in]:numbers}}})
+      if(existentGenre){
+        for (let i = 0; i < existentGenre.length; i++) {
+          genreId.push(existentGenre[i].dataValues.id)
+        }
+      } else {
+        throw new Error ("Numero de referencia de genero inexistente")
+      }
+  }
+
+  if (words.length > 0) {
+
+  const lastGenre = await Genre.findOne({ order: [['id', 'DESC']] });
+  let newGenreId = lastGenre ? lastGenre.dataValues.id : 1;
+  const createGenrePromises = words.map(async (word) => {
+    
+    const existingGenre = await Genre.findOne({ where: { name: word } });
+    if (existingGenre) {
+      return existingGenre.id;
+    } else {
+        newGenreId++
+        const newGenre = await Genre.create({ id: newGenreId, name: word });      
+        return newGenre.dataValues.id;        
+      }
+  });
+
+  const genreIds = await Promise.all(createGenrePromises);
+  genreId.push(...genreIds); // Agrega los IDs al array principal
+}
+}
+
+genre = genreId
+
+
+
   const newBook = await Book.create({
     title,
     author,
@@ -200,8 +269,12 @@ if(typeof author == "number"){
     await newBook.addGenre(genre[i])
   }
   await newBook.setAuthor(authorId)
+  
   //Las relaciones de autor no figuran en la tabla intermedia pero setea el userId del book
   return newBook
+} catch (error) {
+  console.log(error)
+}
 }
 
 const updateBookController = async (
