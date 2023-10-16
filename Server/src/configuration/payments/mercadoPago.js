@@ -1,3 +1,6 @@
+require("dotenv").config();
+const mercadopage = require("mercadopago");
+
 const createOrder = async (req, res) => {
   mercadopage.configure({
     access_token: process.env.MERCADOPAGO_API_KEY,
@@ -20,11 +23,11 @@ const createOrder = async (req, res) => {
           quantity,
         },
       ],
-      notification_url: "https://the-next-page.vercel.app/pay/mercadoPago/webhook",
+      notification_url: "http://localhost:3001/pay/mercadoPago/webhook",
       back_urls: {
-        success: "https://the-next-page.vercel.app/pay/mercadoPago/success",
-        pending: "https://the-next-page.vercel.app/pay/mercadoPago/pending",
-        failure: "https://the-next-page.vercel.app/pay/mercadoPago/failure",
+        success: "http://localhost:3001/pay/mercadoPago/success",
+        pending: "http://localhost:3001/pay/mercadoPago/pending",
+        failure: "http://localhost:3001/pay/mercadoPago/failure",
       },
     });
 
@@ -34,4 +37,26 @@ const createOrder = async (req, res) => {
   } catch (error) {
     return res.status(500).json({ message: "Something goes wrong" });
   }
+};
+
+
+const receiveWebhook = async (req, res) => {
+  try {
+    const payment = req.query;
+    console.log(payment);
+    if (payment.type === "payment") {
+      const data = await mercadopage.payment.findById(payment["data.id"]);
+      console.log(data);
+    }
+
+    res.sendStatus(204);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Something goes wrong" });
+  }
+};
+
+module.exports = { 
+  receiveWebhook, 
+  createOrder 
 };
