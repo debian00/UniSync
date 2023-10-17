@@ -6,6 +6,7 @@ const {
 
 const updateFavoriteHandler = async (req, res) => {
     const { userId, bookId } = req.body;
+    console.log(userId, bookId);
     try {
         await userAddFavoriteController(userId,bookId);
         res.status(200).json("El libro se agregó a favoritos.")

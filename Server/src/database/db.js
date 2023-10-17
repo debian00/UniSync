@@ -10,6 +10,7 @@ const SaleModel = require("./models/sales")
 const AuthorModel = require('./models/authors')
 const GenreModel = require('./models/genres')
 const CartModel = require('./models/carts')
+const ContactModel = require("./models/contacts");
 
 const sequelize = new Sequelize(
   `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}/${DB_NAME}`,
@@ -23,8 +24,9 @@ SaleModel(sequelize);
 AuthorModel(sequelize);
 GenreModel(sequelize)
 CartModel(sequelize)
+ContactModel(sequelize);
 
-const { Book, User, Review, Sale, Author, Genre, Cart } = sequelize.models;
+const { Book, User, Review, Sale, Author, Genre, Cart, Contact } = sequelize.models;
 
 //Relaciones de Book
 Book.hasMany(Review);
@@ -54,6 +56,8 @@ Cart.belongsTo(User);
 User.hasMany(Sale);
 Sale.belongsTo(User);
 
+Contact.belongsToMany(User, { through: "userContact" });
+User.belongsTo(Contact, { through: "userContact" });
 
 module.exports = {
   sequelize,
