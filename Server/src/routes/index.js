@@ -35,7 +35,7 @@ router.use('/sale', saleRouter)
 //Rutas de reviews
 router.use('/review',reviewRouter)
 //Ruta enviar promocion
-router.use('/sendmail', promoRouter)
+router.use('/sendpromotion', promoRouter)
 //Ruta de cart
 router.use('/cart', cartRouter)
 
