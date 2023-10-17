@@ -14,17 +14,18 @@ const server = express()
 server.use(morgan('dev'));
 server.use(express.json())
 server.use(cors({
-  origin: 'http://localhost:5173',
+  origin:'https://the-next-page.vercel.app',
   credentials: true,
 }))
 
 const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
-  database: 'UniSyncDB',
+  database: 'railway',
   password: process.env.DB_PASSWORD,
   port: 5432
 });
+
 
 //session express
 server.use(

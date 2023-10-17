@@ -23,11 +23,11 @@ const createOrder = async (req, res) => {
           quantity,
         },
       ],
-      // notification_url: "requiere rutas https con /webhook",
+      notification_url: "http://localhost:3001/pay/mercadoPago/webhook",
       back_urls: {
-        success: "http://localhost:3000/success",
-        // pending: "requiere rutas https",
-        // failure: "requiere rutas https",
+        success: "http://localhost:3001/pay/mercadoPago/success",
+        pending: "http://localhost:3001/pay/mercadoPago/pending",
+        failure: "http://localhost:3001/pay/mercadoPago/failure",
       },
     });
 
