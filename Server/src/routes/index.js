@@ -15,6 +15,8 @@ const resetPasswordRouter = require('./loginRoutes/resetPasswordRouter');
 const cartRouter = require("./modelRoutes/cartRouter")
 const favoriteRouter = require('./favoriteRoutes/favoriteRouter');
 const invoiceRouter = require("./paymentRoutes/invoiceRouter")
+const contactRouter = require('./contactenos/contactRouter')
+const emailContact = require('./contactenos/email')
 const router = Router()
 
 
@@ -46,6 +48,10 @@ router.use('/forgot-password', forgotPassRouter)
 router.use('/reset-password', resetPasswordRouter)
 //Rutas de favorites
 router.use("/favorites", favoriteRouter);
+
+//Ruta de contactenos
+router.use("/sendmail", emailContact);
+router.use("/contact", contactRouter);
 
 
 module.exports = router
