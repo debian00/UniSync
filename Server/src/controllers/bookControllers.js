@@ -29,7 +29,7 @@ const getAllBooksController = async (req) => {
   const filter = {};
   let genreIds = null
   let page = 1;
-  let size = 10;
+  let size = 1;
   if (!Number.isNaN(pageAsNumber) && pageAsNumber > 1) {page = pageAsNumber;}
   if (!Number.isNaN(sizeAsNumber) && sizeAsNumber > 0 && sizeAsNumber <= 10) {size = sizeAsNumber;}
 
