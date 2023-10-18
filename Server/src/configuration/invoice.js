@@ -3,19 +3,19 @@ const { User } = require("../database/db");
 
 const generateInvoice = async (req, res) => {
   try {
-    const { items } = req.body;
+    const items = req.body;
     const { id } = req.params;
 
     const user = await User.findOne({ where: { id: id } });
-
+    
     if (!user) {
       return res.status(404).json({ error: "Usuario no encontrado" });
     }
-
+    console.log(items)
     const itemsBought = items.map((elem) => {
       return {
-        item: elem.book.title,
-        description: elem.book.author,
+        item: elem.title,
+        description: elem.author,
         quantity: elem.quantity,
         unitPrice: elem.price,
       };
@@ -36,7 +36,7 @@ const generateInvoice = async (req, res) => {
       marginLeft: 50,
       marginTop: 25,
       marginBottom: 25,
-      logo: "https://www.example.com/logo.png",
+      logo: "https://www.designevo.com/res/templates/thumb_small/hot-fire-and-football.webp",
       sender: {
         company: "The-Next-Page-Library",
         address: "Greed Island",
@@ -51,13 +51,7 @@ const generateInvoice = async (req, res) => {
       },
       invoiceNumber: "2023-001",
       invoiceDate: formattedDate,
-      products: [
-        {
-          description: "llibrito",
-          quantity: 2,
-          price: 400,
-        },
-      ],
+      products: itemsBought,
       bottomNotice: "Gracias por su compra.",
     };
 
@@ -65,7 +59,7 @@ const generateInvoice = async (req, res) => {
 
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", "attachment; filename=factura.pdf");
-    res.send(Buffer.from(result.pdf, "base64"));
+    res.status(200).send(Buffer.from(result.pdf, "base64"));
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Error al generar factura" });
