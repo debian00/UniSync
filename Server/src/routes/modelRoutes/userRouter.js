@@ -11,10 +11,6 @@ const {
   allowAdminPermissionsHandler,
   forbidAdminPermissionsHandler
 } = require("../../handlers/userHandlers");
-const {
-  validateCreate,
-  validateUpdate
-} = require("../../configuration/validations/userValidator"); 
 
 const userRouter = Router();
 
@@ -25,9 +21,9 @@ userRouter.get("/search", getUserByNameOrEmailHandler);
 //Traer un usuario por id
 userRouter.get("/:id", getUsersByIdHandler);
 //Crear usuario nuevo
-userRouter.post("/create",validateCreate, createUserHandler);
+userRouter.post("/create", createUserHandler);
 //Actualizar datos de un usuario existente
-userRouter.put("/update/:id",validateUpdate, updateUserHandler);
+userRouter.put("/update/:id", updateUserHandler);
 //Eliminar usuario
 userRouter.delete("/delete/:id", deleteUserHandler);
 // Suspender usuario
