@@ -19,12 +19,10 @@ const forgotPassHandler = async (req, res) => {
     fs.readFile(templatePath, "utf8", async (err, html) => {
       if (err) {
         console.error("Error al leer el archivo de plantilla:", err);
-        return res
-          .status(500)
-          .json({
-            error: "Error al registrar el usuario",
-            details: err.message,
-          });
+        return res.status(500).json({
+          error: "Error al registrar el usuario",
+          details: err.message,
+        });
       }
 
       const user = await User.findOne({ where: { email: email } });
@@ -43,8 +41,8 @@ const forgotPassHandler = async (req, res) => {
         port: 465, // Cambiado de "post" a "port"
         secure: true,
         auth: {
-          user: "thenextpage@grupo-cava.com",
-          pass: "thenextpage00",
+          user: "greattravel.contact@gmail.com",
+          pass: "hbacczxxirmcjmht",
         },
         tls: {
           rejectUnauthorized: false,
@@ -57,7 +55,7 @@ const forgotPassHandler = async (req, res) => {
       );
 
       var mailOptions = {
-        from: "thenextpage@grupo-cava.com",
+        from: "greattravel.contact@gmail.com",
         to: email,
         subject: "Reset Password Link",
         html: html,
