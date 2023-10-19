@@ -51,8 +51,8 @@ const createSaleHandler = async (req, res) => {
       port: 465,
       secure: true,
       auth: {
-        user: "greattravel.contact@gmail.com",
-        pass: "hbacczxxirmcjmht",
+        user: "thenextpage@grupo-cava.com",
+        pass: "thenextpage00",
       },
       tls: {
         rejectUnauthorized: false,
@@ -62,21 +62,13 @@ const createSaleHandler = async (req, res) => {
     const emailUser = await User.findByPk(createdSale[0].userId); // Corregido
 
     const mailOptions = {
-      from: "greattravel.contact@gmail.com",
+      from: "thenextpage@grupo-cava.com",
       to: emailUser.email, // Usar la dirección de correo del usuario
       subject: "Gracias por seleccionarnos",
       text: "Hola como estas?",
     };
 
-    transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-        console.error("Error al enviar el correo:", error);
-        res.status(500).send(error.message);
-      } else {
-        console.log("Email Enviado");
-        res.status(200).json(createdSale);
-      }
-    });
+    transporter.sendMail(mailOptions);
   } catch (error) {
     console.error(error);
     res.status(400).json("Error en la creación de la venta");

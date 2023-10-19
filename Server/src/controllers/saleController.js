@@ -46,8 +46,8 @@ const createSaleController = async ({
         port: 465, // Cambiado de "post" a "port"
         secure: true,
         auth: {
-          user: "greattravel.contact@gmail.com",
-          pass: "hbacczxxirmcjmht",
+          user: "thenextpage@grupo-cava.com",
+          pass: "thenextpage00",
         },
         tls: {
           rejectUnauthorized: false,
@@ -83,7 +83,7 @@ const createSaleController = async ({
       // html = html.replace('<img id="imagenLibroVenta" class="adapt-img" src="" alt style="display: block;" width="70" />', `<img id="imagenLibroVenta" class="adapt-img" src=${bookid.images[0]} alt style="display: block;" width="70" />`);
       // Detalles del correo
       const mailOptions = {
-        from: "greattravel.contact@gmail.com",
+        from: "thenextpage@grupo-cava.com",
         to: emailuser, // Utiliza la dirección del destinatario proporcionada en el cuerpo de la solicitud
         subject: "Datos de tu compra!",
         html: html, // Puedes cambiar esto a HTML si lo deseas
