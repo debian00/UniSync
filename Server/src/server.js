@@ -15,7 +15,7 @@ server.use(morgan("dev"));
 server.use(express.json());
 server.use(
   cors({
-    origin: "https://the-next-page.vercel.app",
+    origin: "*",
     credentials: true,
   })
 );
@@ -28,7 +28,6 @@ const pool = new Pool({
   port: 5432,
 });
 
-server.options("*", cors());
 //session express
 server.use(
   session({
