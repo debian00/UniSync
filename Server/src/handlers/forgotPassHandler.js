@@ -37,7 +37,7 @@ const forgotPassHandler = async (req, res) => {
       });
 
       var transporter = nodemailer.createTransport({
-        host: "mail.grupo-cava.com",
+        host: "smtp.gmail.com",
         port: 465, // Cambiado de "post" a "port"
         secure: true,
         auth: {
