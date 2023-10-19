@@ -6,7 +6,82 @@ const {
   deleteSaleController,
   getSaleByUserIdController,
 } = require("../controllers/saleController");
+const nodemailer = require("nodemailer");
+const {User} = require("../database/db")
+// const path = require('path');
+// const fs = require('fs'); // Asegúrate de requerir fs
+// const templatePath = path.join(__dirname, '../configuration/mailingTemplates/Peticion', 'index.html');
 
+
+//Crea una venta
+const createSaleHandler = async (req, res) => {
+  const { itemsMapped } = req.body;
+  try {
+    const createdSale = [];
+    for (const item of itemsMapped) {
+      const {
+        userId,
+        bookId,
+        purchaseDate,
+        totalPrice,
+        quantity,
+        paymentMethod,
+        cartId,
+      } = item;
+
+      try {
+        const newSale = await createSaleController({
+          userId,
+          bookId,
+          purchaseDate,
+          totalPrice,
+          quantity,
+          paymentMethod,
+          cartId,
+        });
+
+        createdSale.push(newSale);
+      } catch (error) {
+        console.error("Error al crear venta:", error);
+      }
+    }
+
+    var transporter = nodemailer.createTransport({
+      host: "smtp.gmail.com",
+      port: 465,
+      secure: true,
+      auth: {
+        user: "greattravel.contact@gmail.com",
+        pass: "hbacczxxirmcjmht",
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
+
+    const emailUser = await User.findByPk(userId); // Corregido
+
+    const mailOptions = {
+      from: 'greattravel.contact@gmail.com',
+      to: emailUser.email, // Usar la dirección de correo del usuario
+      subject: "Gracias por seleccionarnos",
+      text: "Hola como estas?",
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error("Error al enviar el correo:", error);
+        res.status(500).send(error.message);
+      } else {
+        console.log("Email Enviado");
+        res.status(200).json(createdSale);
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json("Error en la creación de la venta");
+  }
+};
 //Trae todas las ventas
 const getAllSaleHandler = async (req, res) => {
   try {
@@ -42,45 +117,7 @@ const getSaleByUserIdHandler = async (req, res) => {
     res.status(404).json("Venta no encontrada por Id");
   }
 };
-//Crea una venta
-const createSaleHandler = async (req, res) => {
-  const { itemsMapped } = req.body;
-  try {
-    const createdSale = [];
-    itemsMapped.forEach(async (item) => {
-      const {
-        userId,
-        bookId,
-        purchaseDate,
-        totalPrice,
-        quantity,
-        paymentMethod,
-        cartId,
-      } = item;
 
-      try {
-        const newSale = await createSaleController({
-          userId,
-          bookId,
-          purchaseDate,
-          totalPrice,
-          quantity,
-          paymentMethod,
-          cartId,
-        });
-
-        createdSale.push(newSale);
-      } catch (error) {
-        console.error("Error al crear venta:", error);
-      }
-    });
-
-    res.status(200).json(createdSale);
-  } catch (error) {
-    console.log(error);
-    res.status(400).json("Error en la creacion de la venta");
-  }
-};
 
 // Modifica datos de una venta
 const updateSaleHandler = async (req, res) => {

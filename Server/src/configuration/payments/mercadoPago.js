@@ -6,39 +6,34 @@ const createOrder = async (req, res) => {
     access_token: process.env.MERCADOPAGO_API_KEY,
   });
 
-  const { title, author, price, quantity } = req.body;
-
-  if (!title || !author || !price || !quantity) {
-    return res.status(400).json({ message: "Missing required parameters" });
-  }
+  const { items } = req.body;
+  //? Multiple compras
+  const lineItem = items.map((ele) => {
+    return {
+      title: ele.book.title,
+      unit_price: ele.book.sellPrice,
+      currency_id: "ARS",
+      quantity: ele.quantity,
+      id: ele.id,
+      picture_url: ele.book.images[0],
+    };
+  });
 
   try {
     const result = await mercadopage.preferences.create({
-      items: [
-        {
-          title,
-          description: `Autor: ${author}`, // Agregar el autor como descripción
-          unit_price: price * quantity,
-          currency_id: "USD",
-          quantity,
-        },
-      ],
-      // notification_url: "requiere rutas https con /webhook",
+      items: lineItem,
       back_urls: {
-        success: "http://localhost:3000/success",
-        // pending: "requiere rutas https",
-        // failure: "requiere rutas https",
+        success: "http://localhost:3001/pay/mercadoPago/success",
+        pending: "http://localhost:3001/pay/mercadoPago/pending",
+        failure: "http://localhost:3001/pay/mercadoPago/failure",
       },
     });
-
-    console.log(result);
 
     res.json(result.body);
   } catch (error) {
     return res.status(500).json({ message: "Something goes wrong" });
   }
 };
-
 
 const receiveWebhook = async (req, res) => {
   try {
@@ -56,7 +51,7 @@ const receiveWebhook = async (req, res) => {
   }
 };
 
-module.exports = { 
-  receiveWebhook, 
-  createOrder 
+module.exports = {
+  receiveWebhook,
+  createOrder,
 };
