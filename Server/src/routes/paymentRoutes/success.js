@@ -1,7 +1,6 @@
 const successHandler = (req, res) => {
   try {
-    const { items } = req.query;
-    console.log(JSON.parse(items));
+    console.log("bien");
   } catch (error) {
     console.log(error);
   }

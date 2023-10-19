@@ -7,15 +7,15 @@ const {
   getSaleByUserIdController,
 } = require("../controllers/saleController");
 const nodemailer = require("nodemailer");
-const {User} = require("../database/db")
+const { User } = require("../database/db");
 // const path = require('path');
 // const fs = require('fs'); // Asegúrate de requerir fs
 // const templatePath = path.join(__dirname, '../configuration/mailingTemplates/Peticion', 'index.html');
 
-
 //Crea una venta
 const createSaleHandler = async (req, res) => {
   const { itemsMapped } = req.body;
+  console.log(itemsMapped);
   try {
     const createdSale = [];
     for (const item of itemsMapped) {
@@ -59,10 +59,10 @@ const createSaleHandler = async (req, res) => {
       },
     });
 
-    const emailUser = await User.findByPk(userId); // Corregido
+    const emailUser = await User.findByPk(createdSale[0].userId); // Corregido
 
     const mailOptions = {
-      from: 'greattravel.contact@gmail.com',
+      from: "greattravel.contact@gmail.com",
       to: emailUser.email, // Usar la dirección de correo del usuario
       subject: "Gracias por seleccionarnos",
       text: "Hola como estas?",
@@ -117,7 +117,6 @@ const getSaleByUserIdHandler = async (req, res) => {
     res.status(404).json("Venta no encontrada por Id");
   }
 };
-
 
 // Modifica datos de una venta
 const updateSaleHandler = async (req, res) => {
