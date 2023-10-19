@@ -46,29 +46,29 @@ const createSaleHandler = async (req, res) => {
       }
     }
 
-    var transporter = nodemailer.createTransport({
-      host: "mail.grupo-cava.com",
-      port: 465,
-      secure: true,
-      auth: {
-        user: "thenextpage@grupo-cava.com",
-        pass: "thenextpage00",
-      },
-      tls: {
-        rejectUnauthorized: false,
-      },
-    });
+    // var transporter = nodemailer.createTransport({
+    //   host: "smtp.gmail.com",
+    //   port: 465,
+    //   secure: true,
+    //   auth: {
+    //     user: "greattravel.contact@gmail.com",
+    //     pass: "hbacczxxirmcjmht",
+    //   },
+    //   tls: {
+    //     rejectUnauthorized: false,
+    //   },
+    // });
 
-    const emailUser = await User.findByPk(createdSale[0].userId); // Corregido
+    // const emailUser = await User.findByPk(createdSale[0].userId); // Corregido
 
-    const mailOptions = {
-      from: "thenextpage@grupo-cava.com",
-      to: emailUser.email, // Usar la dirección de correo del usuario
-      subject: "Gracias por seleccionarnos",
-      text: "Hola como estas?",
-    };
+    // const mailOptions = {
+    //   from: "greattravel.contact@gmail.com",
+    //   to: emailUser.email, // Usar la dirección de correo del usuario
+    //   subject: "Gracias por seleccionarnos",
+    //   text: "Hola como estas?",
+    // };
 
-    transporter.sendMail(mailOptions);
+    // transporter.sendMail(mailOptions);
   } catch (error) {
     console.error(error);
     res.status(400).json("Error en la creación de la venta");
