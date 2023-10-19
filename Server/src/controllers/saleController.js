@@ -40,12 +40,12 @@ const createSaleController = async ({
         console.error("Error al leer el archivo de plantilla:", err);
       }
       var transporter = nodemailer.createTransport({
-        host: "mail.grupo-cava.com",
+        host: "smtp.gmail.com",
         port: 465, // Cambiado de "post" a "port"
         secure: true,
         auth: {
-          user: "thenextpage@grupo-cava.com",
-          pass: "thenextpage00",
+          user: "greattravel.contact@gmail.com",
+          pass: "hbacczxxirmcjmht",
         },
         tls: {
           rejectUnauthorized: false,

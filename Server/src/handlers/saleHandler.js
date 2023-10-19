@@ -78,12 +78,12 @@ const createSaleHandler = async (req, res) => {
 
         createdSale.push(newSale);
         var transporter = nodemailer.createTransport({
-          host: "mail.grupo-cava.com",
+          host: "smtp.gmail.com",
           port: 465,
           secure: true,
           auth: {
-            user: "thenextpage@grupo-cava.com",
-            pass: "thenextpage00",
+            user: "greattravel.contact@gmail.com",
+            pass: "hbacczxxirmcjmht",
           },
           tls: {
             rejectUnauthorized: false,
@@ -93,7 +93,7 @@ const createSaleHandler = async (req, res) => {
         const emailUser = await User.findByPk(createdSale[0].userId); // Corregido
 
         const mailOptions = {
-          from: "thenextpage@grupo-cava.com",
+          from: "greattravel.contact@gmail.com",
           to: emailUser.email, // Usar la dirección de correo del usuario
           subject: "Gracias por seleccionarnos",
           text: "Hola como estas?",
