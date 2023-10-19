@@ -93,7 +93,7 @@ const createSaleHandler = async (req, res) => {
         const emailUser = await User.findByPk(createdSale[0].userId); // Corregido
 
         const mailOptions = {
-          from: "greattravel.contact@gmail.com",
+          from: "the-next-page.contact@gmail.com",
           to: emailUser.email, // Usar la dirección de correo del usuario
           subject: "Gracias por seleccionarnos",
           text: "Hola como estas?",
