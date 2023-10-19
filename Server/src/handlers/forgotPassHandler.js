@@ -41,7 +41,7 @@ const forgotPassHandler = async (req, res) => {
               }
         });
 
-        html = html.replace('<strong id="userPassword"></strong>', `<strong id="userPassword">${`https://the-next-page.vercel.app/reset_password/${user.id}/${token}`}</strong>`);
+        html = html.replace('<strong id="userPassword"></strong>', `<strong id="userPassword">${`http://localhost:5173/reset_password/${user.id}/${token}`}</strong>`);
        
 
         var mailOptions = {
