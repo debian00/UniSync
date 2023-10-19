@@ -47,7 +47,7 @@ const createSaleHandler = async (req, res) => {
     }
 
     var transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
+      host: "mail.grupo-cava.com",
       port: 465,
       secure: true,
       auth: {
