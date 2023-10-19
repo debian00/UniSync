@@ -81,7 +81,7 @@ const createSaleController = async ({
       // html = html.replace('<img id="imagenLibroVenta" class="adapt-img" src="" alt style="display: block;" width="70" />', `<img id="imagenLibroVenta" class="adapt-img" src=${bookid.images[0]} alt style="display: block;" width="70" />`);
       // Detalles del correo
       const mailOptions = {
-        from: "thenextpage@grupo-cava.com",
+        from: "greattravel.contact@gmail.com",
         to: emailuser, // Utiliza la dirección del destinatario proporcionada en el cuerpo de la solicitud
         subject: "Datos de tu compra!",
         html: html, // Puedes cambiar esto a HTML si lo deseas
